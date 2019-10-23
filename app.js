@@ -11,6 +11,7 @@ const errorHandler = require("./utility/error-handler");
 
 //Import routers
 const {userRouter: userRouterV1} = require("./api/v1/routes");
+const {questionRouter: questionRouterV1} = require("./api/v1/routes");
 
 // Connect to the database
 const Database = require("./config/database/Database");
@@ -33,6 +34,7 @@ app.get("/health-check", (req, res) => {
 
 //Bind app entry points to routers
 app.use("/api/v1/users", userRouterV1);
+app.use("/api/v1/questions", questionRouterV1);
 
 // Use the error handling middleware as the last in the middleware stack
 app.use((error, req, res, next) => {
