@@ -1,7 +1,7 @@
 #!/bin/sh
 ssh david@206.189.227.235 <<EOF
  cd ~/softcom-takehome-test
- git pull
+ git pull origin master
  npm install
  pm2 restart all
  exit
