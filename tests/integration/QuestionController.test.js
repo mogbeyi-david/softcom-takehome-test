@@ -21,12 +21,12 @@ describe("Question Resource", () => {
 
     describe("Create a new question", () => {
 
-        it("should return a 400 if the payload does not pass a question", async () => {
-            const badUserPayload = {};
+        it("should return a 401 if the client is not logged in", async () => {
+            const badQuestionPayload = {};
             const response = await request(server)
                 .post(baseURL)
-                .send(badUserPayload);
-            expect(response.status).toEqual(400);
+                .send(badQuestionPayload);
+            expect(response.status).toEqual(401);
         });
 
 
