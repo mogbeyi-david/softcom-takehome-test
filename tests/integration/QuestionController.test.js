@@ -1,8 +1,10 @@
 import 'babel-polyfill';
 
 let server;
+const mongoose = require("mongoose");
 const request = require("supertest");
 const User = require("../../models/User");
+const Question = require("../../models/Question");
 
 
 describe("Question Resource", () => {
@@ -50,5 +52,24 @@ describe("Question Resource", () => {
             expect(response.status).toEqual(201);
         });
     });
+
+    describe("Get all questions", () => {
+        it("should return all questions", async () => {
+            await Question.insertMany([
+                {
+                    question: "Is this the first question?",
+                    user: mongoose.Types.ObjectId()
+                },
+                {
+                    question: "Is this the second question?",
+                    user: mongoose.Types.ObjectId()
+                }
+            ]);
+
+            const response = await request(server)
+                .get(`${baseURL}`);
+            expect(response.status).toEqual(200);
+        });
+    })
 
 });

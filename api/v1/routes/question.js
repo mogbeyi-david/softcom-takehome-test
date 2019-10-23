@@ -5,5 +5,7 @@ const authMiddleware = require("../../../middlewares/auth");
 
 router.post("/", authMiddleware, QuestionController.create);
 
+router.get("/", QuestionController.getAll);
+
 
 module.exports = router;

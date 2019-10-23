@@ -14,6 +14,10 @@ class QuestionRepository {
         return await this.question.create(question);
     }
 
+    async getAll() {
+        return await this.question.find({});
+    }
+
 }
 
 module.exports = new QuestionRepository(Question);

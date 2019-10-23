@@ -30,6 +30,15 @@ class QuestionController {
             next(e);
         }
     }
+
+    async getAll(req, res, next) {
+        try {
+            const questions = await QuestionRepository.getAll();
+            return response.sendSuccess({res, body: questions, message: "All questions"});
+        } catch (e) {
+            next(e);
+        }
+    }
 }
 
 module.exports = new QuestionController;
