@@ -147,6 +147,32 @@ describe("USER RESOURCE", () => {
         });
     });
 
+    describe("Getting all Users", () => {
+
+        it("should return 200 with an array of all the users", async () => {
+            await User.insertMany([
+                {
+                    firstname: "first_test_user_firstname",
+                    lastname: "first_test_user_lastname",
+                    email: "test1@email.com",
+                    password: await hasher.encryptPassword("boozai234")
+                },
+                {
+                    firstname: "second_test_user_firstname",
+                    lastname: "second_test_user_lastname",
+                    email: "test2@email.com",
+                    password: await hasher.encryptPassword("boozai234")
+                }
+            ]);
+
+            const response = await request(server)
+                .get(`${baseURL}`);
+            expect(response.status).toEqual(200);
+        });
+
+    });
+
+
 
 
 });

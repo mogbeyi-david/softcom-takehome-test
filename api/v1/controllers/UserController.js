@@ -37,6 +37,22 @@ class UserController {
         }
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<*>}
+     */
+    async getAll(req, res, next) {
+        try {
+            const users = await UserRepository.findAll();
+            return response.sendSuccess({res, body: users});
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new UserController;
