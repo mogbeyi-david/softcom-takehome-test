@@ -1,10 +1,11 @@
 const status = require("http-status");
+const response = require("../utility/response");
 
-function admin(req, res, next) {
+const admin = (req, res, next) => {
     if (!req.user.isAdmin) {
-        return res.status(status.FORBIDDEN).send({message: 'Access Denied'})
+        return response.sendError({res, message: "Access Denied", statusCode: status.FORBIDDEN});
     }
     next();
-}
+};
 
 module.exports = admin;
