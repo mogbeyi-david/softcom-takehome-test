@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/mogbeyi-david/softcom-takehome-test/issues"
   },
-  "homepage": "https://github.com/mogbeyi-david/softcom-takehome-test#readme"
+  "homepage": "https://github.com/mogbeyi-david/softcom-takehome-test#readme",
+  "devDependencies": {
+    "eslint": "^6.5.1"
+  }
 }
