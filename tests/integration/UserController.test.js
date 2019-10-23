@@ -4,7 +4,8 @@ const request = require("supertest");
 const User = require("../../models/User");
 const hasher = require("../../utility/hasher");
 
-describe("USER RESOURCE", () => {
+
+describe("User Resource", () => {
 
     beforeEach(() => {
         server = require("../../app");
@@ -29,7 +30,7 @@ describe("USER RESOURCE", () => {
         });
     });
 
-    describe("Creating a user", () => {
+    describe("Creating a new user", () => {
         it("should return 400 if required payload parameters are missing", async () => {
             const badUserPayload = {
                 firstname: "Test_Firstname",
@@ -172,6 +173,30 @@ describe("USER RESOURCE", () => {
 
     });
 
+    describe("Getting one User", () => {
+
+        it("should return 200 if the user exists", async () => {
+
+            const testUser = await User.create({
+                firstname: "test_user_firstname",
+                lastname: "test_user_lastname",
+                email: "test@gmail.com",
+                password: "boozai234"
+            });
+            const testUserId = testUser._id;
+            const response = await request(server)
+                .get(`${baseURL}/${testUserId}`);
+            expect(response.status).toEqual(200);
+        });
+
+        it("should return 404 if the user does not exists", async () => {
+            const response = await request(server)
+                .get(`${baseURL}/222222222222`);
+            expect(response.status).toEqual(404);
+        });
+
+    });
+
     describe("Updating a user", () => {
 
         it("should return 400 if the firstname, lastname or email is missing", async () => {
@@ -305,5 +330,6 @@ describe("USER RESOURCE", () => {
         });
 
     });
+
 
 });
