@@ -4,6 +4,6 @@ module.exports = {
         "/node_modules/"
     ],
     "transformIgnorePatterns": [
-        "/node_modules/"
+        "node_modules/(?!(<package-need-to-transform>|<other-package-need-to-transform>)/)"
     ]
 };
