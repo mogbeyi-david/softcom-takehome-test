@@ -29,7 +29,7 @@ app.get("/health-check", (req, res) => {
 });
 
 // Use the error handling middleware as the last in the middleware stack
-app.use(function (error, req, res, next) {
+app.use((error, req, res, next) => {
     res.locals.message = error.message;
     res.locals.error = process.env.NODE_ENV === "development" ? error : {};
     winston.error(`${error.status || 500} - ${error.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
