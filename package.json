@@ -4,7 +4,8 @@
   "description": "An application that implements the basic features of stack overflow",
   "main": "app.js",
   "scripts": {
-    "test": "npm test"
+    "test": "export NODE_ENV=testing && jest --runInBand --coverage --verbose --forceExit",
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
