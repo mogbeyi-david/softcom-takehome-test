@@ -3,6 +3,7 @@ ssh david@206.189.227.235 <<EOF
  cd ~/softcom-takehome-test
  git pull origin master
  npm install
+ npm test
  pm2 restart all
  exit
 EOF
