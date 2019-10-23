@@ -19,10 +19,6 @@ describe("User Resource", () => {
 	const baseURL = "/api/v1/users";
 
 	describe("Setting Up", () => {
-		it("should set node environment to testing", function () {
-			expect(process.env.NODE_ENV).toBe("testing");
-		});
-
 		it("should ping the API", async () => {
 			const response = await request(server)
 				.get("/health-check");
