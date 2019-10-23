@@ -4,7 +4,7 @@ const response = require("../utility/response");
 
 const validateObjectId = (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-        return response.sendError({res, statusCode: status.NOT_FOUND, message: "Invalid ObjectId Passed"});
+        return response.sendError({res, statusCode: status.BAD_REQUEST, message: "Invalid ObjectId Passed"});
     }
     next();
 };

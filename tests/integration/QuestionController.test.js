@@ -72,4 +72,29 @@ describe("Question Resource", () => {
         });
     })
 
+    describe("Getting one question", () => {
+        it("should return 404 if the question is not found", async () => {
+            const response = await request(server)
+                .get(`${baseURL}/222222222222`);
+            expect(response.status).toEqual(404);
+        });
+
+        it("should return 400 for an invalid question id", async () => {
+            const response = await request(server)
+                .get(`${baseURL}/wew`);
+            expect(response.status).toEqual(400);
+        });
+
+        it("should return 200  for a valid question", async () => {
+            const testQuestion = await Question.create({
+                question: "Is this a valid question",
+                user: mongoose.Types.ObjectId()
+            });
+            const testQuestionId = testQuestion._id;
+            const response = await request(server)
+                .get(`${baseURL}/${testQuestionId}`);
+            expect(response.status).toEqual(200);
+        });
+    })
+
 });
