@@ -43,7 +43,54 @@ class AuthController {
         } catch (e) {
             next(e);
         }
+    }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<*>}
+     */
+    async sendResetPasswordLink(req, res, next) {
+        try {
+            const {email} = req.body;
+            if (!email) return response.sendError({res, message: "Email is required"});
+            const user = await UserRepository.findByEmail(email);
+            if (user) {
+                await mailer.sendPasswordResetLink(user.email);
+            }
+            return response.sendSuccess({
+                res,
+                message: "Please check your email for further instructions on resetting your password"
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<*>}
+     */
+    async resetPassword(req, res, next) {
+        try {
+            let {email} = req.query;
+            let {password, confirmPassword} = req.body;
+            if (password !== confirmPassword) return response.sendError({res, message: "Passwords do not match"});
+            let user = await UserRepository.findByEmail(email);
+            if (!user) return response.sendError({res, message: "User does not exist", statusCode: status.NOT_FOUND});
+            password = await hasher.encryptPassword(password);
+            user.password = password;
+            const result = await user.save();
+            user = _.pick(result, ["_id", "firstname", "lastname", "email"]);
+            return response.sendSuccess({res, message: "Password reset successfully", body: user});
+        } catch (e) {
+            next(e);
+        }
     }
 
 }
