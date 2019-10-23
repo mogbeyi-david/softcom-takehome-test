@@ -4,7 +4,7 @@
   "description": "An application that implements the basic features of stack overflow",
   "main": "app.js",
   "scripts": {
-    "test": "export NODE_ENV=testing && export PORT=3001 && jest --runInBand --coverage --verbose --forceExit",
+    "test": "export NODE_ENV=test && export PORT=3001 && jest --runInBand --coverage --verbose --forceExit",
     "start": "nodemon --exec babel-node app.js"
   },
   "repository": {
@@ -28,7 +28,7 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-env": "^7.6.3",
     "@babel/register": "^7.4.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
