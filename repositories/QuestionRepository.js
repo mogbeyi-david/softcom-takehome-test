@@ -10,6 +10,10 @@ class QuestionRepository {
         this.question = question;
     }
 
+    async create(question) {
+        return await this.question.create(question);
+    }
+
 }
 
 module.exports = new QuestionRepository(Question);
