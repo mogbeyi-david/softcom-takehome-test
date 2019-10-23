@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 const mongoose = require("mongoose");
 let server;
 const request = require("supertest");
