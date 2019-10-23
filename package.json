@@ -1,0 +1,26 @@
+{
+  "name": "softcom-takehome-test",
+  "version": "1.0.0",
+  "description": "An application that implements the basic features of stack overflow",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mogbeyi-david/softcom-takehome-test.git"
+  },
+  "keywords": [
+    "softcom",
+    "stack",
+    "overflow",
+    "questions",
+    "answers"
+  ],
+  "author": "David Mogbeyi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mogbeyi-david/softcom-takehome-test/issues"
+  },
+  "homepage": "https://github.com/mogbeyi-david/softcom-takehome-test#readme"
+}
