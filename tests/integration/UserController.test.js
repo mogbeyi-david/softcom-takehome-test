@@ -4,7 +4,7 @@ const request = require("supertest");
 const User = require("../../models/User");
 const hasher = require("../../utility/hasher");
 
-describe("User Resource", () => {
+describe("USER RESOURCE", () => {
 
     beforeEach(() => {
         server = require("../../app");
@@ -29,5 +29,19 @@ describe("User Resource", () => {
         });
     });
 
+    describe("Creating a user", () => {
+        it("should return 400 if required payload parameters are missing", async () => {
+            const badUserPayload = {
+                firstname: "Test_Firstname",
+                email: "Test_Email",
+                password: "Test_Password"
+            };
+            const response = await request(server)
+                .post(baseURL)
+                .send(badUserPayload);
+            expect(response.status).toEqual(400);
+        });
+    });
 
-})
+
+});

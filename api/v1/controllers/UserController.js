@@ -9,6 +9,19 @@ const hasher = require("../../../utility/hasher");
 
 class UserController {
 
+    async create(req, res, next) {
+
+        const {error} = validateCreateUser(req.body);
+        if (error) {
+            return response.sendError({res, message: error.details[0].message});
+        }
+
+        try {
+        } catch (e) {
+            next(e)
+        }
+    }
+
 }
 
 module.exports = new UserController;

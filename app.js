@@ -9,6 +9,9 @@ const response = require("./utility/response");
 const winston = require("./config/logger/winston");
 const errorHandler = require("./utility/error-handler");
 
+//Import routers
+const {userRouter: userRouterV1} = require("./api/v1/routes");
+
 // Connect to the database
 const Database = require("./config/database/Database");
 const connectionString = require("./config/database/connection");
@@ -27,6 +30,9 @@ app.use(cors());
 app.get("/health-check", (req, res) => {
     return response.sendSuccess({res});
 });
+
+//Bind app entry points to routers
+app.use("/api/v1/users", userRouterV1);
 
 // Use the error handling middleware as the last in the middleware stack
 app.use((error, req, res, next) => {
