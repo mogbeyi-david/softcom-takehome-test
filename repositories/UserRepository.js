@@ -45,6 +45,16 @@ class UserRepository {
         return await this.user.findOne({_id: id});
     }
 
+    /**
+     *
+     * @param user
+     * @param id
+     * @returns {Promise<void>}
+     */
+    async update(user, id) {
+        return await this.user.findOneAndUpdate({_id: id}, user, {new: true});
+    }
+
 }
 
 module.exports = new UserRepository(User);

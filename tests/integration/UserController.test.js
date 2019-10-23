@@ -172,7 +172,138 @@ describe("USER RESOURCE", () => {
 
     });
 
+    describe("Updating a user", () => {
 
+        it("should return 400 if the firstname, lastname or email is missing", async () => {
+            const badPayload = {};
+            const response = await request(server)
+                .put(`${baseURL}/USER_ID_GOES_HERE`)
+                .send(badPayload);
+            expect(response.status).toEqual(400);
+        });
 
+        it("should return 404 if the user does not exist", async () => {
+            const badPayload = {
+                firstname: "test_firstname",
+                lastname: "test_lastname",
+                email: "test@email.com",
+            };
+            const testId = mongoose.Types.ObjectId();
+            const response = await request(server)
+                .put(`${baseURL}/${testId}`)
+                .send(badPayload);
+            expect(response.status).toEqual(404);
+            expect(response.body.message).toEqual("User does not exist");
+        });
+
+        it("should return 400 if the newPassword and confirmNewPassword does not match", async () => {
+            const testUser = await User.create({
+                firstname: "test_first_name",
+                lastname: "test_last_name",
+                email: "test@email.com",
+                password: "boozai234"
+            });
+            const badPayload = {
+                firstname: "test_firstname",
+                lastname: "test_lastname",
+                email: "test@email.com",
+                newPassword: "d",
+                confirmNewPassword: ""
+            };
+            const id = testUser._id;
+            const response = await request(server)
+                .put(`${baseURL}/${id}`)
+                .send(badPayload);
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual("Passwords do not match");
+        });
+
+        it("should return 400 if the old password does not match the existing password", async () => {
+            const testUser = await User.create({
+                firstname: "test_first_name",
+                lastname: "test_last_name",
+                email: "test@email.com",
+                password: await hasher.encryptPassword("boozai234")
+            });
+            const badPayload = {
+                firstname: "test_firstname",
+                lastname: "test_lastname",
+                email: "test@email.com",
+                oldPassword: "boozai23443",
+                newPassword: "boozai234",
+                confirmNewPassword: "boozai234"
+            };
+            const id = testUser._id;
+            const response = await request(server)
+                .put(`${baseURL}/${id}`)
+                .send(badPayload);
+            expect(response.status).toEqual(400);
+        });
+
+        it("should return 400 if the new password is not secure enough", async () => {
+            const testUser = await User.create({
+                firstname: "test_first_name",
+                lastname: "test_last_name",
+                email: "test@email.com",
+                password: await hasher.encryptPassword("boozai234")
+            });
+            const badPayload = {
+                firstname: "test_firstname",
+                lastname: "test_lastname",
+                email: "test@email.com",
+                oldPassword: "boozai234",
+                newPassword: "ke",
+                confirmNewPassword: "ke"
+            };
+            const id = testUser._id;
+            const response = await request(server)
+                .put(`${baseURL}/${id}`)
+                .send(badPayload);
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual("Password is not secure enough");
+        });
+        it("should return 200 with the updated user details", async () => {
+            const testUser = await User.create({
+                firstname: "test_first_name",
+                lastname: "test_last_name",
+                email: "test@email.com",
+                password: await hasher.encryptPassword("boozai234")
+            });
+            const newUser = {
+                firstname: "updated_test_firstname",
+                lastname: "updated_test_lastname",
+                email: "updated_test@email.com",
+                oldPassword: "boozai234",
+                newPassword: "boozai23456",
+                confirmNewPassword: "boozai23456"
+            };
+            const id = testUser._id;
+            const response = await request(server)
+                .put(`${baseURL}/${id}`)
+                .send(newUser);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toEqual("User details updated successfully");
+        });
+
+        it("should return 500 if the newPassword and confirmNewPassword is not passed", async () => {
+            const testUser = await User.create({
+                firstname: "test_first_name",
+                lastname: "test_last_name",
+                email: "test@email.com",
+                password: await hasher.encryptPassword("boozai234")
+            });
+            const newUser = {
+                firstname: "updated_test_firstname",
+                lastname: "updated_test_lastname",
+                email: "updated_test@email.com",
+            };
+            const id = testUser._id;
+            const response = await request(server)
+                .put(`${baseURL}/${id}`)
+                .send(newUser);
+            expect(response.status).toEqual(500);
+        });
+
+    });
 
 });

@@ -10,6 +10,9 @@ router.post("/login", AuthController.login);
 router.get("/", UserController.getAll);
 router.get("/:id", UserController.getOne);
 
+router.put("/:id", UserController.update);
+
+
 
 
 module.exports = router;
