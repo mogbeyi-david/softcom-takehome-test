@@ -8,6 +8,7 @@ router.post("/", UserController.create);
 router.post("/login", AuthController.login);
 
 router.get("/", UserController.getAll);
+router.get("/:id", UserController.getOne);
 
 
 

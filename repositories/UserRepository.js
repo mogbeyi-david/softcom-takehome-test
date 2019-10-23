@@ -36,6 +36,15 @@ class UserRepository {
         return await this.user.find({}, {password: false, isAdmin: false});
     }
 
+    /**
+     *
+     * @param id
+     * @returns {Promise<*|TInstance|T>}
+     */
+    async findOne(id) {
+        return await this.user.findOne({_id: id});
+    }
+
 }
 
 module.exports = new UserRepository(User);

@@ -53,6 +53,26 @@ class UserController {
         }
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<*>}
+     */
+    async getOne(req, res, next) {
+        try {
+            const {id} = req.params;
+            const user = await UserRepository.findOne(id);
+            if (!user) {
+                return response.sendError({res, message: "User not found", statusCode: status.NOT_FOUND});
+            }
+            return response.sendSuccess({res, body: user});
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new UserController;
