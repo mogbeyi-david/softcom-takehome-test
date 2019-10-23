@@ -28,7 +28,7 @@ app.use(cors());
 
 //Ping the API to ensure it is running.
 app.get("/health-check", (req, res) => {
-	return response.sendSuccess({res});
+    return response.sendSuccess({res, message: "Health check passed successfully!"});
 });
 
 //Bind app entry points to routers
@@ -36,15 +36,15 @@ app.use("/api/v1/users", userRouterV1);
 
 // Use the error handling middleware as the last in the middleware stack
 app.use((error, req, res, next) => {
-	res.locals.message = error.message;
-	res.locals.error = process.env.NODE_ENV === "development" ? error : {};
-	winston.error(`${error.status || 500} - ${error.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
-	return errorHandler.handle(error, req, res, next);
+    res.locals.message = error.message;
+    res.locals.error = process.env.NODE_ENV === "development" ? error : {};
+    winston.error(`${error.status || 500} - ${error.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
+    return errorHandler.handle(error, req, res, next);
 });
 
 // Declare port and run the server
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
-	console.log(`Server running on port: ${PORT}`);
+    console.log(`Server running on port: ${PORT}`);
 });
 module.exports = server;
