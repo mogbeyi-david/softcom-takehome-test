@@ -1,0 +1,8 @@
+fail_on_violations: false
+
+jshint:
+  enabled: false
+
+eslint:
+  enabled: true
+  config: .eslintrc.json
