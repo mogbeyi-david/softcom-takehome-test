@@ -5,6 +5,6 @@ module.exports = {
     ],
     transformIgnorePatterns: ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"],
     "transform": {
-        "^.+\\.js$": "babel-jest",
+        "^.+\\.(js|jsx)?$": "<rootDir>/node_modules/babel-jest"
     }
 };
