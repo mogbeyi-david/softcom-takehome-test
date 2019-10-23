@@ -81,5 +81,72 @@ describe("USER RESOURCE", () => {
         });
     });
 
+    describe("Logging in a User", () => {
+        it("should return 400 if the payload does not contain email", async () => {
+            const badUserPayload = {
+                password: "boozai234"
+            };
+            const response = await request(server)
+                .post(`${baseURL}/login`)
+                .send(badUserPayload);
+            expect(response.status).toEqual(400);
+        });
+
+        it("should return 400 the passwords does not match the one in the DB", async () => {
+
+            await User.insertMany([
+                {
+                    firstname: "Test_Firstname",
+                    lastname: "Test_Lastname",
+                    email: "test@email.com",
+                    password: await hasher.encryptPassword("boozai234")
+                }
+            ]);
+
+            const badUserPayload = {
+                email: "test@email.com",
+                password: "boozai2345"
+            };
+            const response = await request(server)
+                .post(`${baseURL}/login`)
+                .send(badUserPayload);
+            expect(response.status).toEqual(400);
+        });
+
+        it("should return 400 if the user does not exist", async () => {
+            const badUserPayload = {
+                email: "test@email.com",
+                password: "boozai234"
+            };
+            const response = await request(server)
+                .post(`${baseURL}/login`)
+                .send(badUserPayload);
+            expect(response.status).toEqual(400);
+        });
+
+        it("should return 200 if the user exists", async () => {
+
+
+            await User.insertMany([
+                {
+                    firstname: "Test_Firstname",
+                    lastname: "Test_Lastname",
+                    email: "test@email.com",
+                    password: await hasher.encryptPassword("boozai234")
+                }
+            ]);
+
+            const badUserPayload = {
+                email: "test@email.com",
+                password: "boozai234"
+            };
+            const response = await request(server)
+                .post(`${baseURL}/login`)
+                .send(badUserPayload);
+            expect(response.status).toEqual(200);
+        });
+    });
+
+
 
 });
