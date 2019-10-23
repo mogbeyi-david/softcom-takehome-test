@@ -10,6 +10,14 @@ class UserRepository {
         this.user = user;
     }
 
+    async create(user) {
+        return await this.user.create(user);
+    }
+
+    async findByEmail(email) {
+        return await this.user.findOne({email});
+    }
+
 }
 
 module.exports = new UserRepository(User);

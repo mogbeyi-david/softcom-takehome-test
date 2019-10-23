@@ -15,8 +15,23 @@ class UserController {
         if (error) {
             return response.sendError({res, message: error.details[0].message});
         }
+        let {firstname, lastname, email, password} = req.body;
 
         try {
+
+            const existingUser = await UserRepository.findByEmail(email);
+            if (existingUser) {
+                return response.sendError({res, message: "User already exists"});
+            }
+            password = await hasher.encryptPassword(password);
+            const result = await UserRepository.create({firstname, lastname, email, password});
+            const user = _.pick(result, ["_id", "firstname", "lastname", "email"]);
+            return response.sendSuccess({
+                res,
+                message: "User created successfully",
+                body: user,
+                statusCode: status.CREATED
+            });
         } catch (e) {
             next(e)
         }
