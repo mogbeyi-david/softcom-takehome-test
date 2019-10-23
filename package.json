@@ -24,6 +24,29 @@
   },
   "homepage": "https://github.com/mogbeyi-david/softcom-takehome-test#readme",
   "devDependencies": {
-    "eslint": "^6.5.1"
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "nodemon": "^1.19.3",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "@hapi/joi": "^16.1.7",
+    "app-root-path": "^2.2.1",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http-status": "^1.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.1",
+    "morgan": "^1.9.1",
+    "nodemailer": "^6.3.1",
+    "swagger-jsdoc": "^3.4.0",
+    "swagger-ui-express": "^4.1.1",
+    "winston": "^3.2.1",
+    "winston-mail": "^2.0.0",
+    "winston-mongodb": "^5.0.0"
   }
 }
