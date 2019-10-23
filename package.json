@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "export NODE_ENV=testing && jest --runInBand --coverage --verbose --forceExit",
-    "start": "nodemon app.js"
+    "start": "nodemon --exec babel-node app.js"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,14 @@
     "eslint": "^6.5.1",
     "jest": "^24.9.0",
     "nodemon": "^1.19.3",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/node": "^7.2.2",
+    "babel-polyfill": "^6.26.0",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/register": "^7.4.0",
+    "babel-eslint": "^10.0.1"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
