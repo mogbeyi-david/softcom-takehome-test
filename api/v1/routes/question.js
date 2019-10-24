@@ -9,5 +9,7 @@ router.post("/", authMiddleware, QuestionController.create);
 router.get("/", QuestionController.getAll);
 router.get("/:id", [validateObjectIdMiddleware], QuestionController.getOne);
 
+router.put("/:id", [validateObjectIdMiddleware, authMiddleware], QuestionController.update);
+
 
 module.exports = router;

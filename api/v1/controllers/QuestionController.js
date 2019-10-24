@@ -66,11 +66,41 @@ class QuestionController {
 
         try {
             const question = await QuestionRepository.getOne(id);
-            console.log("Single Question", question);
             if (!question) {
                 return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
             }
             return response.sendSuccess({res, body: question, message: question.question});
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async update(req, res, next) {
+        const {id} = req.params;
+        const {userId: user, isAdmin} = req.user;
+        const {error} = validateCreateQuestion(req.body);
+        if (error) {
+            return response.sendError({res, message: error.details[0].message});
+        }
+        let {question: updatedQuestion} = req.body;
+
+        try {
+            const question = await QuestionRepository.getOne(id);
+            if (!question) {
+                return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
+            }
+            console.log("Question", question.user.toString(), typeof question.user.toString(), "User", user, "Is Admin", isAdmin);
+            console.log(user !== question.user.toString() || isAdmin === false);
+            if (user === question.user.toString() || isAdmin) {
+                question.question = updatedQuestion;
+                const result = await question.save();
+                return response.sendSuccess({res, message: "Question updated successfully", data: result});
+            }
+            return response.sendError({
+                res,
+                statusCode: status.UNAUTHORIZED,
+                message: "You do not have the right to update this question"
+            })
         } catch (e) {
             next(e);
         }

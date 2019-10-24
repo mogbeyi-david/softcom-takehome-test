@@ -33,7 +33,7 @@ class UserRepository {
      * @returns {Promise<*>}
      */
 	async findAll() {
-		return await this.user.find({}, {password: false, isAdmin: false});
+		return await this.user.find({}, {password: false, isAdmin: false}).lean();
 	}
 
 	/**
