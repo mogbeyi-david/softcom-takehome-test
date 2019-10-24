@@ -17,7 +17,7 @@ describe("Answer Resource", () => {
 
     afterEach(async () => {
         server.close();
-        await User.remove({});
+        await Answer.remove({});
     });
 
     const baseURL = "/api/v1/answers";
@@ -58,6 +58,26 @@ describe("Answer Resource", () => {
             expect(response.body.message).toMatch(/required/i);
         });
 
+        it("should return a 400 if the question does not exist", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+            const token = testUser.generateJsonWebToken();
+            const payload = {
+                answer: "I have already answered",
+                question: mongoose.Types.ObjectId()
+            };
+            const response = await request(server)
+                .post(baseURL)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(404);
+            expect(response.body.message).toMatch(/not/i);
+        });
+
         it("should return a 200 if the payload is valid", async () => {
             const testUser = await User.create({
                 firstname: "testtest",
@@ -81,6 +101,27 @@ describe("Answer Resource", () => {
             expect(response.status).toEqual(200);
             expect(response.body.message).toMatch(/success/i);
             expect(response.body.body.answer).toEqual("I have already answered");
+        });
+    });
+
+    describe("Get all answers", () => {
+        it("should return all answers", async () => {
+            await Answer.insertMany([
+                {
+                    question: mongoose.Types.ObjectId(),
+                    answer: "This is the first answer"
+                },
+                {
+                    question: mongoose.Types.ObjectId(),
+                    answer: "This is the second answer"
+                }
+            ]);
+
+            const response = await request(server)
+                .get(baseURL);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toMatch(/answers/i);
+            expect(response.body.body.length).toEqual(2);
         });
     })
 

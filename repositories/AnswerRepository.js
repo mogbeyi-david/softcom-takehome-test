@@ -24,7 +24,7 @@ class AnswerRepository {
      * @returns {Promise<*>}
      */
     async findAll() {
-        return await this.answer.find({}).lean();
+        return await this.answer.find({}).populate("question").lean();
     }
 
     /**

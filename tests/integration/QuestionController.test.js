@@ -16,7 +16,7 @@ describe("Question Resource", () => {
 
 	afterEach(async () => {
 		server.close();
-		await User.remove({});
+		await Question.remove({});
 	});
 
 	const baseURL = "/api/v1/questions";

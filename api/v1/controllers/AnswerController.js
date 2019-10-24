@@ -14,7 +14,7 @@ class AnswerController {
         if (error) {
             return response.sendError({res, message: error.details[0].message});
         }
-        const {answer, question} = req.body;
+        let {answer, question} = req.body;
         const {userId: user} = req.user;
         let newAnswer = {
             answer, user, question
@@ -22,13 +22,34 @@ class AnswerController {
         try {
             newAnswer = await AnswerRepository.create(newAnswer);
             if (newAnswer && newAnswer._id) {
-                await QuestionRepository.addAnswers(question, newAnswer._id);
+                question = await QuestionRepository.addAnswers(question, newAnswer._id);
+            }
+            if (!question) {
+                return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
             }
             return response.sendSuccess({res, message: "Question Answered successfully", body: newAnswer});
         } catch (e) {
             next(e);
         }
     }
+
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<void>}
+     */
+    async findAll(req, res, next) {
+        try {
+            const answers = await AnswerRepository.findAll();
+            return response.sendSuccess({res, message: "All answers", body: answers});
+        } catch (e) {
+            next(e);
+        }
+    }
+
+
 }
 
 module.exports = new AnswerController();
