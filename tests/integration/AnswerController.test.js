@@ -57,6 +57,31 @@ describe("Answer Resource", () => {
             expect(response.status).toEqual(400);
             expect(response.body.message).toMatch(/required/i);
         });
+
+        it("should return a 200 if the payload is valid", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+            const token = testUser.generateJsonWebToken();
+            const testQuestion = await Question.create({
+                question: "Is this a valid question",
+                user: testUser._id
+            });
+            const payload = {
+                answer: "I have already answered",
+                question: testQuestion._id
+            };
+            const response = await request(server)
+                .post(baseURL)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toMatch(/success/i);
+            expect(response.body.body.answer).toEqual("I have already answered");
+        });
     })
 
 });

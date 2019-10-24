@@ -2,12 +2,13 @@ const status = require("http-status");
 
 const response = require("../../../utility/response");
 const AnswerRepository = require("../../../repositories/AnswerRepository");
+const QuestionRepository = require("../../../repositories/QuestionRepository");
 const validateCreateAnswer = require("../../../validations/answer/validate-create-answer");
 
 class AnswerController {
 
 
-    create(req, res, next) {
+    async create(req, res, next) {
 
         const {error} = validateCreateAnswer(req.body);
         if (error) {
@@ -19,7 +20,11 @@ class AnswerController {
             answer, user, question
         };
         try {
-            newAnswer = await AnswerRepository.create()
+            newAnswer = await AnswerRepository.create(newAnswer);
+            if (newAnswer && newAnswer._id) {
+                await QuestionRepository.addAnswers(question, newAnswer._id);
+            }
+            return response.sendSuccess({res, message: "Question Answered successfully", body: newAnswer});
         } catch (e) {
             next(e);
         }
