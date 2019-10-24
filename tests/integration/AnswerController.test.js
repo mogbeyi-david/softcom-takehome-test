@@ -174,7 +174,7 @@ describe("Answer Resource", () => {
         });
     })
 
-    describe("Updating a question", () => {
+    describe("Updating an answer", () => {
         it("should return a 401 if the user is not logged in", async () => {
             const payload = {};
             const testId = mongoose.Types.ObjectId();
@@ -294,5 +294,67 @@ describe("Answer Resource", () => {
         });
     });
 
+    describe("Up-voting or down-voting an answer", () => {
+        it("should return a 401 when an unauthenticated user tries to up-vote or down-vote an answer", async () => {
+            const payload = {};
+            const testId = mongoose.Types.ObjectId();
+            const response = await request(server)
+                .put(`${baseURL}/${testId}/vote`)
+                .send(payload);
+            expect(response.status).toEqual(401);
+        });
+
+        it("should return a 404 for an answer that does not exist", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const payload = {};
+            const testId = mongoose.Types.ObjectId();
+            const response = await request(server)
+                .put(`${baseURL}/${testId}/vote`)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(404);
+        });
+
+        it("should successfully up-vote an answer", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+            const token = testUser.generateJsonWebToken();
+            const testAnswer = await Answer.create({
+                answer: "this is a valid question",
+                user: testUser._id,
+                question: mongoose.Types.ObjectId()
+            });
+            const response = await request(server)
+                .put(`${baseURL}/${testAnswer._id}/vote`)
+                .set("x-auth-token", token);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toEqual("Answer up-voted successfully");
+            expect(response.body.body.upVotes).toEqual(1);
+        });
+
+        it("should successfully down-vote a question", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+            const token = testUser.generateJsonWebToken();
+            const testAnswer = await Answer.create({
+                answer: "Is this a valid question",
+                user: testUser._id
+            });
+            const response = await request(server)
+                .put(`${baseURL}/${testAnswer._id}/vote?up=0`)
+                .set("x-auth-token", token);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toEqual("Answer down-voted successfully");
+            expect(response.body.body.downVotes).toEqual(1);
+        });
+    });
 
 });

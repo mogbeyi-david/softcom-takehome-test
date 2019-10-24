@@ -13,6 +13,7 @@ router.get("/question/:id", AnswerController.findAllForQuestion);
 router.get("/:id", AnswerController.findOne);
 router.get("/", AnswerController.findAll);
 
+router.put("/:id/vote", [validateObjectIdMiddleware, authMiddleware], VoteController.voteAnswer);
 router.put("/:id", [validateObjectIdMiddleware, authMiddleware], AnswerController.update);
 
 module.exports = router;
