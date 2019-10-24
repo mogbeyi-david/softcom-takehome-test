@@ -137,6 +137,14 @@ describe("Answer Resource", () => {
             expect(response.body.message).toMatch(/answer/i);
             expect(response.body.body.answer).toEqual("This is the new method");
         });
+
+        it("should return a 404 if the answer is not found", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const testAnswerId = mongoose.Types.ObjectId();
+            const response = await request(server)
+                .get(`${baseURL}/${testAnswerId}`);
+            expect(response.status).toEqual(404);
+        });
     });
 
     describe("Get all answers for one question", () => {
@@ -174,6 +182,19 @@ describe("Answer Resource", () => {
                 .put(`${baseURL}/${testId}`)
                 .send(payload);
             expect(response.status).toEqual(401);
+        });
+
+        it("should return a 404 if the answer is not found", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const testId = mongoose.Types.ObjectId();
+            const payload = {
+                answer: "Not found answer"
+            };
+            const response = await request(server)
+                .put(`${baseURL}/${testId}`)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(404);
         });
 
         it("should return a 400 if the payload does not have an answer", async () => {
