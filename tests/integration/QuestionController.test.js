@@ -261,7 +261,7 @@ describe("Question Resource", () => {
 				.set("x-auth-token", token);
 			expect(response.status).toEqual(200);
 			expect(response.body.message).toEqual("Question down-voted successfully");
-			expect(response.body.body.downVotes).toEqual(-1);
+			expect(response.body.body.downVotes).toEqual(1);
 		});
 	});
 });
