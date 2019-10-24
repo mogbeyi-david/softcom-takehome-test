@@ -9,13 +9,16 @@ const QuestionSchema = new Schema({
         required: true
     },
     views: {
-        type: Number
+        type: Number,
+        default: 0
     },
     upVotes: {
-        type: Number
+        type: Number,
+        default: 0
     },
     downVotes: {
-        type: Number
+        type: Number,
+        default: 0
     },
     user: {
         type: Schema.Types.ObjectId,

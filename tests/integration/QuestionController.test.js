@@ -212,5 +212,56 @@ describe("Question Resource", () => {
                 .send(payload);
             expect(response.status).toEqual(401);
         });
+
+        it("should return a 404 for a question that does not exist", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const payload = {};
+            const testId = mongoose.Types.ObjectId();
+            const response = await request(server)
+                .put(`${baseURL}/${testId}/vote`)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(404);
+        });
+
+        it("should successfully up-vote a question", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+            const token = testUser.generateJsonWebToken();
+            const testQuestion = await Question.create({
+                question: "Is this a valid question",
+                user: testUser._id
+            });
+            const response = await request(server)
+                .put(`${baseURL}/${testQuestion._id}/vote`)
+                .set("x-auth-token", token);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toEqual("Question up-voted successfully");
+            expect(response.body.body.upVotes).toEqual(1);
+        });
+
+        it("should successfully down-vote a question", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+            const token = testUser.generateJsonWebToken();
+            const testQuestion = await Question.create({
+                question: "Is this a valid question",
+                user: testUser._id
+            });
+            const response = await request(server)
+                .put(`${baseURL}/${testQuestion._id}/vote?up=0`)
+                .set("x-auth-token", token);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toEqual("Question down-voted successfully");
+            expect(response.body.body.downVotes).toEqual(-1);
+        });
     })
 });
