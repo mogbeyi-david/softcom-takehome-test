@@ -31,6 +31,32 @@ describe("Answer Resource", () => {
                 .send(payload);
             expect(response.status).toEqual(401);
         });
+
+        it("should return a 400 if the payload does not have an answer", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const payload = {
+                question: mongoose.Types.ObjectId()
+            };
+            const response = await request(server)
+                .post(baseURL)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toMatch(/required/i);
+        });
+
+        it("should return a 400 if the payload does not have a question", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const payload = {
+                answer: "Call the ID dynamixally"
+            };
+            const response = await request(server)
+                .post(baseURL)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toMatch(/required/i);
+        });
     })
 
 });

@@ -7,6 +7,8 @@ const Joi = require("@hapi/joi");
  */
 const validateCreateAnswer = (user) => {
     const schema = Joi.object({
+        question: Joi.string()
+            .required(),
         answer: Joi.string()
             .required()
     });
