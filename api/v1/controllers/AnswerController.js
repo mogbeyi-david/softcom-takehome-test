@@ -13,13 +13,13 @@ class AnswerController {
         if (error) {
             return response.sendError({res, message: error.details[0].message});
         }
-        const {answer} = req.body;
+        const {answer, question} = req.body;
         const {userId: user} = req.user;
-        const newAnswer = {
-            answer, user
+        let newAnswer = {
+            answer, user, question
         };
         try {
-
+            newAnswer = await AnswerRepository.create()
         } catch (e) {
             next(e);
         }
