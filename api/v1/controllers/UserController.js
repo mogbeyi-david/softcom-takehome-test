@@ -10,6 +10,13 @@ const hasher = require("../../../utility/hasher");
 
 class UserController {
 
+	/**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<*>}
+     */
 	async create(req, res, next) {
 
 		const {error} = validateCreateUser(req.body);
@@ -74,6 +81,13 @@ class UserController {
 		}
 	}
 
+	/**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<*>}
+     */
 	async update(req, res, next) {
 
 		try {
