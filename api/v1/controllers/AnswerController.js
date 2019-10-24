@@ -49,6 +49,26 @@ class AnswerController {
         }
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<void>}
+     */
+    async findOne(req, res, next) {
+        const {id} = req.params;
+        try {
+            const answer = await AnswerRepository.findOne(id);
+            if (!answer) {
+                return response.sendError({res, message: "Answer not found", statusCode: status.NOT_FOUND})
+            }
+            return response.sendSuccess({res, message: "Single answer", body: answer});
+        } catch (e) {
+            next(e);
+        }
+    }
+
 
 }
 

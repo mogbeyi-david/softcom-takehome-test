@@ -7,6 +7,7 @@ const validateObjectIdMiddleware = require("../../../middlewares/validate-object
 
 router.post("/", authMiddleware, AnswerController.create);
 
+router.get("/:id", AnswerController.findOne);
 router.get("/", AnswerController.findAll);
 
 

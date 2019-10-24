@@ -123,6 +123,20 @@ describe("Answer Resource", () => {
             expect(response.body.message).toMatch(/answers/i);
             expect(response.body.body.length).toEqual(2);
         });
+    });
+
+    describe("Get one answer", () => {
+        it("should return an answer", async () => {
+            const answer = await Answer.create({
+                question: mongoose.Types.ObjectId(),
+                answer: "This is the new method"
+            });
+            const response = await request(server)
+                .get(`${baseURL}/${answer._id}`);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toMatch(/answer/i);
+            expect(response.body.body.answer).toEqual("This is the new method");
+        });
     })
 
 });
