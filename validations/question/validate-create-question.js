@@ -6,11 +6,11 @@ const Joi = require("@hapi/joi");
  * @returns {*}
  */
 const validateQuestion = (user) => {
-    const schema = Joi.object({
-        question: Joi.string()
-            .required()
-    });
-    return schema.validate(user);
+	const schema = Joi.object({
+		question: Joi.string()
+			.required()
+	});
+	return schema.validate(user);
 };
 
 module.exports = validateQuestion;
