@@ -69,6 +69,17 @@ class AnswerController {
         }
     }
 
+    async findAllForQuestion(req, res, next) {
+        const {id} = req.params;
+
+        try {
+            const answers = await AnswerRepository.findAllForQuestion(id);
+            return response.sendSuccess({res, message: "All answers for single question", body: answers});
+        } catch (e) {
+            next(e);
+        }
+    }
+
 
 }
 

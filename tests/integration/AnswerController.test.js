@@ -137,6 +137,33 @@ describe("Answer Resource", () => {
             expect(response.body.message).toMatch(/answer/i);
             expect(response.body.body.answer).toEqual("This is the new method");
         });
+    });
+
+    describe("Get all answers for one question", () => {
+
+        it("should return an answer", async () => {
+            const firstQuestionId = mongoose.Types.ObjectId();
+            const secondQuestionId = mongoose.Types.ObjectId();
+            await Answer.insertMany([
+                {
+                    question: firstQuestionId,
+                    answer: "This is the first answer"
+                },
+                {
+                    question: secondQuestionId,
+                    answer: "This is the second answer"
+                },
+                {
+                    question: firstQuestionId,
+                    answer: "This is the third answer"
+                },
+            ]);
+            const response = await request(server)
+                .get(`${baseURL}/question/${firstQuestionId}`);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toMatch(/answers/i);
+            expect(response.body.body.length).toEqual(2);
+        });
     })
 
 });
