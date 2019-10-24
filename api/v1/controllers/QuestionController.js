@@ -46,7 +46,7 @@ class QuestionController {
      */
     async getAll(req, res, next) {
         try {
-            const questions = await QuestionRepository.getAll();
+            const questions = await QuestionRepository.findAll();
             return response.sendSuccess({res, body: questions, message: "All questions"});
         } catch (e) {
             next(e);
@@ -65,7 +65,7 @@ class QuestionController {
         const {id} = req.params;
 
         try {
-            const question = await QuestionRepository.getOne(id);
+            const question = await QuestionRepository.findOne(id);
             if (!question) {
                 return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
             }
@@ -85,22 +85,29 @@ class QuestionController {
         let {question: updatedQuestion} = req.body;
 
         try {
-            const question = await QuestionRepository.getOne(id);
+            const question = await QuestionRepository.findOne(id);
             if (!question) {
                 return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
             }
-            console.log("Question", question.user.toString(), typeof question.user.toString(), "User", user, "Is Admin", isAdmin);
-            console.log(user !== question.user.toString() || isAdmin === false);
             if (user === question.user.toString() || isAdmin) {
                 question.question = updatedQuestion;
                 const result = await question.save();
-                return response.sendSuccess({res, message: "Question updated successfully", data: result});
+                return response.sendSuccess({res, message: "Question updated successfully", body: result});
             }
             return response.sendError({
                 res,
                 statusCode: status.UNAUTHORIZED,
                 message: "You do not have the right to update this question"
             })
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    async vote(req, res, next) {
+        const {id} = req.params;
+        try {
+            const question = await QuestionRepository.findOne()
         } catch (e) {
             next(e);
         }

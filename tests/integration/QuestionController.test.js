@@ -202,4 +202,15 @@ describe("Question Resource", () => {
             expect(response.status).toEqual(200);
         });
     })
+
+    describe("Up-voting or down-voting a question", () => {
+        it("should return a 401 when an unauthenticated user tries to up-vote or down-vote a question", async () => {
+            const payload = {};
+            const testId = mongoose.Types.ObjectId();
+            const response = await request(server)
+                .put(`${baseURL}/${testId}/vote`)
+                .send(payload);
+            expect(response.status).toEqual(401);
+        });
+    })
 });
