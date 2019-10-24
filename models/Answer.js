@@ -3,14 +3,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 
-const QuestionSchema = new Schema({
-    question: {
+const AnswerSchema = new Schema({
+    answer: {
         type: String,
         required: true
-    },
-    views: {
-        type: Number,
-        default: 0
     },
     upVotes: {
         type: Number,
@@ -24,14 +20,12 @@ const QuestionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
-    answers: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "Answer"
-        }
-    ]
+    question: {
+        type: Schema.Types.ObjectId,
+        ref: "Question"
+    }
 }, {timestamps: true});
 
-// Creates the question model
-const Question = mongoose.model("Question", QuestionSchema);
-module.exports = Question;
+// Creates the answer model
+const Answer = mongoose.model("Answer", AnswerSchema);
+module.exports = Answer;
