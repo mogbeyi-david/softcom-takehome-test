@@ -4,6 +4,7 @@ const response = require("../../../utility/response");
 const AnswerRepository = require("../../../repositories/AnswerRepository");
 const QuestionRepository = require("../../../repositories/QuestionRepository");
 const validateCreateAnswer = require("../../../validations/answer/validate-create-answer");
+const validateUpdateAnswer = require("../../../validations/answer/validate-update-answer");
 
 class AnswerController {
 
@@ -60,6 +61,7 @@ class AnswerController {
         const {id} = req.params;
         try {
             const answer = await AnswerRepository.findOne(id);
+            console.log(id);
             if (!answer) {
                 return response.sendError({res, message: "Answer not found", statusCode: status.NOT_FOUND})
             }
@@ -80,7 +82,41 @@ class AnswerController {
         }
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns {Promise<*>}
+     */
+    async update(req, res, next) {
 
+        const {id} = req.params;
+        const {error} = validateUpdateAnswer(req.body);
+        if (error) {
+            return response.sendError({res, message: error.details[0].message});
+        }
+        let {answer} = req.body;
+        const {userId: user, isAdmin} = req.user;
+        try {
+            const initialAnswer = await AnswerRepository.findOne(id);
+            if (!initialAnswer) {
+                return response.sendError({res, message: "Answer not found", statusCode: status.NOT_FOUND});
+            }
+            if (initialAnswer.user.toString() === user.toString() || isAdmin) {
+                initialAnswer.answer = answer;
+                const result = await initialAnswer.save();
+                return response.sendSuccess({res, message: "Answer updated successfully", body: result});
+            }
+            return response.sendError({
+                res,
+                message: "You do not have required permission to update this answer",
+                statusCode: status.UNAUTHORIZED
+            })
+        } catch (e) {
+            next(e)
+        }
+    }
 }
 
 module.exports = new AnswerController();

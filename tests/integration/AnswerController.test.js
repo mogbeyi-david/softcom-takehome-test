@@ -166,4 +166,112 @@ describe("Answer Resource", () => {
         });
     })
 
+    describe("Updating a question", () => {
+        it("should return a 401 if the user is not logged in", async () => {
+            const payload = {};
+            const testId = mongoose.Types.ObjectId();
+            const response = await request(server)
+                .put(`${baseURL}/${testId}`)
+                .send(payload);
+            expect(response.status).toEqual(401);
+        });
+
+        it("should return a 400 if the payload does not have an answer", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const testId = mongoose.Types.ObjectId();
+            const payload = {};
+            const response = await request(server)
+                .put(`${baseURL}/${testId}`)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(400);
+        });
+
+        it("should return a 401 if it is not the user who gave the answer", async () => {
+            const token = (new User()).generateJsonWebToken();
+            const testUser = new User({
+                firstname: "test_user",
+                lastname: "test_user",
+                email: "user@test.com",
+                isAdmin: false,
+                password: await hasher.encryptPassword("boozai1234")
+            });
+            let testAnswer = new Answer({
+                answer: "A new answer",
+                user: testUser._id
+            });
+            testAnswer = await testAnswer.save();
+            const payload = {
+                answer: "This is the updated answer"
+            };
+            const response = await request(server)
+                .put(`${baseURL}/${testAnswer._id}`)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(401);
+        });
+
+        it("should return a 200 for a valid payload", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+
+            const testAnswer = await Answer.create({
+                question: mongoose.Types.ObjectId(),
+                user: testUser._id,
+                answer: "The updated answer"
+            });
+
+            const testAnswerId = testAnswer._id;
+            const token = testUser.generateJsonWebToken();
+            const payload = {
+                answer: "This is the updated answer"
+            };
+            const response = await request(server)
+                .put(`${baseURL}/${testAnswerId}`)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(200);
+        });
+
+        it("should return a 200 if admin tries to change the answer", async () => {
+            const testUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+
+            const testAnswer = await Answer.create({
+                answer: "Is this a valid question?",
+                user: testUser._id,
+                question: mongoose.Types.ObjectId()
+            });
+
+            const testAnswerId = testAnswer._id;
+
+            const adminUser = await User.create({
+                firstname: "testtest",
+                lastname: "testtest",
+                email: "testtest@gmail.com",
+                isAdmin: true,
+                password: await hasher.encryptPassword("boozai123")
+            });
+
+            const token = adminUser.generateJsonWebToken();
+            const payload = {
+                answer: "Admin given answer"
+            };
+            const response = await request(server)
+                .put(`${baseURL}/${testAnswerId}`)
+                .set("x-auth-token", token)
+                .send(payload);
+            expect(response.status).toEqual(200);
+        });
+    });
+
+
 });
