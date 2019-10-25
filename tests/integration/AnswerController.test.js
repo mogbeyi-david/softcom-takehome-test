@@ -281,7 +281,7 @@ describe("Answer Resource", () => {
             const adminUser = await User.create({
                 firstname: "testtest",
                 lastname: "testtest",
-                email: "testtest@gmail.com",
+                email: "testtest1@gmail.com",
                 isAdmin: true,
                 password: await hasher.encryptPassword("boozai123")
             });
