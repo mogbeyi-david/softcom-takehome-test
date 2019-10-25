@@ -1,14 +1,13 @@
-const Subscription = require("../models/Subscription");
 const rabbitMqService = require("./rabbitmq");
 
 class SubscriptionService {
 
     /**
      *
-     * @param subscribers
+     * @param data
      */
-    static notifySubscribersToQuestion(subscribers) {
-        return rabbitMqService.publish("notify-subscribers-to-question", subscribers);
+    static notifySubscribersToQuestion(data) {
+        return rabbitMqService.publish("notify-subscribers-to-question", data);
     }
 
 

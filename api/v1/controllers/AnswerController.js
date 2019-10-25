@@ -3,6 +3,7 @@ const status = require("http-status");
 const response = require("../../../utility/response");
 const AnswerRepository = require("../../../repositories/AnswerRepository");
 const QuestionRepository = require("../../../repositories/QuestionRepository");
+const SubscriptionService = require("../../../services/subscription");
 const validateCreateAnswer = require("../../../validations/answer/validate-create-answer");
 const validateUpdateAnswer = require("../../../validations/answer/validate-update-answer");
 
@@ -28,6 +29,8 @@ class AnswerController {
             if (!question) {
                 return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
             }
+            // Notify all subscribers
+            SubscriptionService.notifySubscribersToQuestion({question: question._id});
             return response.sendSuccess({res, message: "Question Answered successfully", body: newAnswer});
         } catch (e) {
             next(e);

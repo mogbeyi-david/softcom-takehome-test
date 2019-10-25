@@ -13,7 +13,7 @@ class RabbitMqService {
             return conn.createChannel();
         }).then(function (ch) {
             return ch.assertQueue(queue).then(function (ok) {
-                return ch.sendToQueue(queue, data);
+                return ch.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
             });
         }).catch(console.warn);
     }
