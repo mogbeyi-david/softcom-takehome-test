@@ -8,6 +8,8 @@ const response = require("../../../utility/response");
 const hasher = require("../../../utility/hasher");
 const mailer = require("../../../utility/mailer");
 const UserRepository = require("../../../repositories/UserRepository");
+const handleCall = require("../../../helper/handleCall");
+
 
 class AuthController {
 
@@ -26,7 +28,7 @@ class AuthController {
         }
 
         let {email, password} = req.body;
-        try {
+        handleCall((async () => {
             const user = await UserRepository.findByEmail(email);
             if (!user) {
                 return response.sendError({res, message: "Email or Password is Incorrect"});
@@ -40,9 +42,7 @@ class AuthController {
             const result = _.pick(user, ["firstname", "lastname", "email"]);
             res.header("x-auth-token", token);
             return response.sendSuccess({res, body: result, message: "Login successful"});
-        } catch (e) {
-            next(e);
-        }
+        }))
     }
 
     /**
@@ -53,7 +53,7 @@ class AuthController {
      * @returns {Promise<*>}
      */
     async sendResetPasswordLink(req, res, next) {
-        try {
+        handleCall((async () => {
             const {email} = req.body;
             if (!email) return response.sendError({res, message: "Email is required"});
             const user = await UserRepository.findByEmail(email);
@@ -63,9 +63,7 @@ class AuthController {
                 res,
                 message: "Please check your email for further instructions on resetting your password"
             });
-        } catch (e) {
-            next(e);
-        }
+        }))
     }
 
     /**
@@ -76,7 +74,7 @@ class AuthController {
      * @returns {Promise<*>}
      */
     async resetPassword(req, res, next) {
-        try {
+        handleCall((async () => {
             let {email} = req.query;
             let {password, confirmPassword} = req.body;
             if (password !== confirmPassword) return response.sendError({res, message: "Passwords do not match"});
@@ -87,9 +85,7 @@ class AuthController {
             const result = await user.save();
             user = _.pick(result, ["_id", "firstname", "lastname", "email"]);
             return response.sendSuccess({res, message: "Password reset successfully", body: user});
-        } catch (e) {
-            next(e);
-        }
+        }))
     }
 
 }
