@@ -1,8 +1,12 @@
 import "babel-polyfill";
+
 const mongoose = require("mongoose");
 let server;
 const request = require("supertest");
 const User = require("../../models/User");
+const Answer = require("../../models/Answer");
+const Question = require("../../models/Question");
+const Subscription = require("../../models/Subscription");
 const hasher = require("../../utility/hasher");
 
 
@@ -14,7 +18,10 @@ describe("User Resource", () => {
 
 	afterEach(async () => {
 		server.close();
-		await User.remove({});
+		await User.deleteMany({});
+		await Question.deleteMany({});
+		await Answer.deleteMany({});
+		await Subscription.deleteMany({});
 	});
 
 	const baseURL = "/api/v1/users";

@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const request = require("supertest");
 const User = require("../../models/User");
 const Question = require("../../models/Question");
+const Subscription = require("../../models/Subscription");
+const Answer = require("../../models/Answer");
 const hasher = require("../../utility/hasher");
 
 
@@ -16,7 +18,10 @@ describe("Question Resource", () => {
 
 	afterEach(async () => {
 		server.close();
-		await Question.remove({});
+		await Subscription.deleteMany({});
+		await Question.deleteMany({});
+		await User.deleteMany({});
+		await Answer.deleteMany({});
 	});
 
 	const baseURL = "/api/v1/questions";
@@ -186,7 +191,7 @@ describe("Question Resource", () => {
 			const adminUser = await User.create({
 				firstname: "testtest",
 				lastname: "testtest",
-				email: "testtest@gmail.com",
+				email: "testtest1@gmail.com",
 				isAdmin: true,
 				password: await hasher.encryptPassword("boozai123")
 			});
