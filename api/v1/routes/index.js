@@ -6,9 +6,9 @@ const searchRouter = require("./search");
 
 
 module.exports = {
-    userRouter,
-    questionRouter,
-    answerRouter,
-    subscriptionRouter,
-    searchRouter
+	userRouter,
+	questionRouter,
+	answerRouter,
+	subscriptionRouter,
+	searchRouter
 };
