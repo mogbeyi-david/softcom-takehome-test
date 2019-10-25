@@ -9,55 +9,55 @@ const handleCall = require("../../../helper/handleCall");
 
 class SubscriptionController {
 
-    /**
+	/**
      *
      * @param req
      * @param res
      * @param next
      * @returns {Promise<*>}
      */
-    async subscribeToQuestion(req, res, next) {
+	async subscribeToQuestion(req, res, next) {
 
-        const {error} = validateSubscribeToQuestion(req.body);
-        if (error) {
-            return response.sendError({res, message: error.details[0].message});
-        }
-        let {user, question} = req.body;
-        handleCall((async () => {
-            const existingUser = await UserRepository.findOne(user);
-            if (!existingUser) {
-                return response.sendError({res, statusCode: status.NOT_FOUND, message: "User does not exist"});
-            }
+		const {error} = validateSubscribeToQuestion(req.body);
+		if (error) {
+			return response.sendError({res, message: error.details[0].message});
+		}
+		let {user, question} = req.body;
+		handleCall((async () => {
+			const existingUser = await UserRepository.findOne(user);
+			if (!existingUser) {
+				return response.sendError({res, statusCode: status.NOT_FOUND, message: "User does not exist"});
+			}
 
-            const existingQuestion = await QuestionRepository.findOne(question);
-            if (!existingQuestion) {
-                return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question does not exist"});
-            }
-            const newSubscription = await SubscriptionRepository.subscribeToQuestion(question, user);
-            return response.sendSuccess({
-                res,
-                message: "User subscribed to question successfully",
-                statusCode: status.CREATED,
-                body: newSubscription
-            });
-        }))
-    }
+			const existingQuestion = await QuestionRepository.findOne(question);
+			if (!existingQuestion) {
+				return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question does not exist"});
+			}
+			const newSubscription = await SubscriptionRepository.subscribeToQuestion(question, user);
+			return response.sendSuccess({
+				res,
+				message: "User subscribed to question successfully",
+				statusCode: status.CREATED,
+				body: newSubscription
+			});
+		}));
+	}
 
-    /**
+	/**
      *
      * @param req
      * @param res
      * @param next
      * @returns {Promise<void>}
      */
-    async getAllForQuestion(req, res, next) {
+	async getAllForQuestion(req, res, next) {
 
-        const {id} = req.params;
-        handleCall((async () => {
-            const subscriptions = await SubscriptionRepository.getAllForQuestion(id);
-            return response.sendSuccess({res, body: subscriptions, message: "Subscriptions for question"});
-        }))
-    }
+		const {id} = req.params;
+		handleCall((async () => {
+			const subscriptions = await SubscriptionRepository.getAllForQuestion(id);
+			return response.sendSuccess({res, body: subscriptions, message: "Subscriptions for question"});
+		}));
+	}
 
 }
 
