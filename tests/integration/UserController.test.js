@@ -423,6 +423,4 @@ describe("User Resource", () => {
             expect(response.body.message).toMatch(/Please check your email/);
         });
     })
-
-
 });
