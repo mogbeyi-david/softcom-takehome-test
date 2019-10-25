@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^16.1.7",
+    "amqplib": "^0.5.5",
     "app-root-path": "^2.2.1",
     "babel-jest": "^24.9.0",
     "bcrypt": "^3.0.6",
