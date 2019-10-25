@@ -4,6 +4,11 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 
+// Connect to the database
+const Database = require("./config/database/Database");
+const connectionString = require("./config/database/connection");
+new Database(connectionString).connect();
+
 //Pull in custom modules
 const response = require("./utility/response");
 const winston = require("./config/logger/winston");
@@ -14,11 +19,6 @@ const {userRouter: userRouterV1} = require("./api/v1/routes");
 const {questionRouter: questionRouterV1} = require("./api/v1/routes");
 const {answerRouter: answerRouterV1} = require("./api/v1/routes");
 const {subscriptionRouter: subscriptionRouterV1} = require("./api/v1/routes");
-
-// Connect to the database
-const Database = require("./config/database/Database");
-const connectionString = require("./config/database/connection");
-new Database(connectionString).connect();
 
 //Initialize express application
 const app = express();
