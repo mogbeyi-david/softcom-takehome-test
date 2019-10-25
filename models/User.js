@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const mongoosastic = require("mongoosastic");
+const mexp = require('mongoose-elasticsearch-xp').v7;
 const jwt = require("jsonwebtoken");
 const Schema = mongoose.Schema;
 
@@ -10,16 +10,19 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const UserSchema = new Schema({
     firstname: {
         type: String,
-        required: true
+        required: true,
+        es_indexed: true
     },
     lastname: {
         type: String,
-        required: true
+        required: true,
+        es_indexed: true
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        es_indexed: true
     },
     password: {
         type: String,
@@ -42,19 +45,8 @@ UserSchema.methods.generateJsonWebToken = function () {
     }, JWT_SECRET_KEY);
 };
 
-UserSchema.plugin(mongoosastic, {
-    "host": process.env.APP_URL,
-    "port": process.env.ELASTIC_SEARCH_PORT || 9200
-});
+UserSchema.plugin(mexp);
 
 // Creates the user model
 const User = mongoose.model("User", UserSchema);
-User.createMapping((err, mapping) => {
-    console.log('mapping created');
-});
-
-User.on('es-indexed', (err, result) => {
-    console.log('indexed to elastic search');
-});
-
 module.exports = User;
