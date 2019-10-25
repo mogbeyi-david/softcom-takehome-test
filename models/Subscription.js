@@ -4,15 +4,15 @@ const Schema = mongoose.Schema;
 
 
 const SubscriptionSchema = new Schema({
-    question: {
-        type: Schema.Types.ObjectId,
-        ref: "Question"
-    },
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        unique: true
-    }
+	question: {
+		type: Schema.Types.ObjectId,
+		ref: "Question"
+	},
+	user: {
+		type: Schema.Types.ObjectId,
+		ref: "User",
+		unique: true
+	}
 }, {timestamps: true});
 
 // Creates the subscription model
