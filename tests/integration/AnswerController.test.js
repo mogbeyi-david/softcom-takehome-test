@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const request = require("supertest");
 const User = require("../../models/User");
 const Question = require("../../models/Question");
+const Subscription = require("../../models/Subscription");
 const Answer = require("../../models/Answer");
 const hasher = require("../../utility/hasher");
 
@@ -17,7 +18,10 @@ describe("Answer Resource", () => {
 
     afterEach(async () => {
         server.close();
-        await Answer.remove({});
+        await Subscription.deleteMany({});
+        await Question.deleteMany({});
+        await User.deleteMany({});
+        await Answer.deleteMany({});
     });
 
     const baseURL = "/api/v1/answers";

@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const SubscriptionController = require("../controllers/SubscriptionController");
+const authMiddleware = require("../../../middlewares/auth");
 
 
-router.post("/subscribe/question", SubscriptionController.subscribeToQuestion);
+router.post("/question", [authMiddleware], SubscriptionController.subscribeToQuestion);
 
 
 module.exports = router;
