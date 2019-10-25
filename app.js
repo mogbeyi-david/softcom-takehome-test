@@ -13,6 +13,7 @@ const errorHandler = require("./utility/error-handler");
 const {userRouter: userRouterV1} = require("./api/v1/routes");
 const {questionRouter: questionRouterV1} = require("./api/v1/routes");
 const {answerRouter: answerRouterV1} = require("./api/v1/routes");
+const {subscriptionRouter: subscriptionRouterV1} = require("./api/v1/routes");
 
 // Connect to the database
 const Database = require("./config/database/Database");
@@ -37,6 +38,7 @@ app.get("/health-check", (req, res) => {
 app.use("/api/v1/users", userRouterV1);
 app.use("/api/v1/questions", questionRouterV1);
 app.use("/api/v1/answers", answerRouterV1);
+app.use("/api/v1/subscriptions", subscriptionRouterV1);
 
 // Use the error handling middleware as the last in the middleware stack
 app.use((error, req, res, next) => {

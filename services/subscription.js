@@ -1,23 +1,17 @@
 const Subscription = require("../models/Subscription");
+const rabbitMqService = require("./rabbitmq");
 
 class SubscriptionService {
 
     /**
      *
-     * @param question
-     * @param user
-     * @returns {Promise<Document>}
+     * @param subscribers
      */
-    static async create(question, user) {
-        return await Subscription.create({
-            question, user
-        })
+    static notifySubscribersToQuestion(subscribers) {
+        return rabbitMqService.publish("notify-subscribers-to-question", subscribers);
     }
 
 
-    publish(queue, data) {
-
-    }
 }
 
 module.exports = SubscriptionService;
