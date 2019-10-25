@@ -114,6 +114,7 @@ describe("Question Resource", () => {
                 .set("x-auth-token", token)
                 .send(payload);
             expect(response.status).toEqual(201);
+            expect(response.body.message).toEqual("User subscribed to question successfully");
         });
     });
 });

@@ -6,7 +6,7 @@ switch (environment) {
 case "production":
 	connectionString = "";
 	break;
-case "test":
+case "testing":
 	connectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.TEST_DB_NAME}`;
 	break;
 default:

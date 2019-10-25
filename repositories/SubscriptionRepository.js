@@ -23,6 +23,10 @@ class SubscriptionRepository {
         })
     }
 
+    async getAllForQuestion(question) {
+        return await this.subscription.find({question}).lean();
+    }
+
 }
 
 module.exports = new SubscriptionRepository(Subscription);

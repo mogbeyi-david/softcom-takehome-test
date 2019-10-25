@@ -43,6 +43,18 @@ class SubscriptionController {
         }
     }
 
+    async getAllForQuestion(req, res, next) {
+
+        const {id} = req.params;
+
+        try {
+            const subscriptions = await SubscriptionRepository.getAllForQuestion(id);
+            return response.sendSuccess({res, body: subscriptions, message: "Subscriptions for question"});
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
 
 module.exports = new SubscriptionController();
