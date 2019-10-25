@@ -7,6 +7,7 @@ const validateCreateUser = require("../../../validations/user/validate-create-us
 const validateUpdateUser = require("../../../validations/user/validate-update-user");
 const response = require("../../../utility/response");
 const hasher = require("../../../utility/hasher");
+const handleCall = require("../../../helper/handleCall");
 
 class UserController {
 
@@ -24,21 +25,13 @@ class UserController {
             return response.sendError({res, message: error.details[0].message});
         }
         let {firstname, lastname, email, password} = req.body;
-
-        try {
-
+        handleCall((async () => {
             const existingUser = await UserRepository.findByEmail(email);
             if (existingUser) {
                 return response.sendError({res, message: "User already exists"});
             }
             password = await hasher.encryptPassword(password);
             const result = await UserRepository.create({firstname, lastname, email, password});
-            result.on('es-indexed', function (err, res) {
-                if (err) {
-                    console.log("Error while trying to index", err)
-                }
-                console.log("Document indexed successfully", res);
-            });
             const user = _.pick(result, ["_id", "firstname", "lastname", "email"]);
             return response.sendSuccess({
                 res,
@@ -46,9 +39,7 @@ class UserController {
                 body: user,
                 statusCode: status.CREATED
             });
-        } catch (e) {
-            next(e);
-        }
+        }))
     }
 
     /**
@@ -59,12 +50,11 @@ class UserController {
      * @returns {Promise<*>}
      */
     async getAll(req, res, next) {
-        try {
+        handleCall((async () => {
             const users = await UserRepository.findAll();
             return response.sendSuccess({res, body: users});
-        } catch (e) {
-            next(e);
-        }
+        }))
+
     }
 
     /**
@@ -75,16 +65,14 @@ class UserController {
      * @returns {Promise<*>}
      */
     async getOne(req, res, next) {
-        try {
+        handleCall((async () => {
             const {id} = req.params;
             const user = await UserRepository.findOne(id);
             if (!user) {
                 return response.sendError({res, message: "User not found", statusCode: status.NOT_FOUND});
             }
             return response.sendSuccess({res, body: user});
-        } catch (e) {
-            next(e);
-        }
+        }))
     }
 
     /**
