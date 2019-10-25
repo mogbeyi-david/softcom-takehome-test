@@ -391,7 +391,37 @@ describe("User Resource", () => {
             expect(response.status).toEqual(200);
             expect(response.body.message).toEqual("Password reset successfully");
         });
+    })
 
+    describe("Forgot Password", () => {
+
+        it("should return 404 if the email is not passed", async () => {
+
+            const payload = {};
+            const response = await request(server)
+                .post(`${baseURL}/forgot-password`)
+                .send(payload);
+            expect(response.status).toEqual(400);
+            expect(response.body.message).toEqual("Email is required");
+        });
+
+        it("should return 200 if the payload is valid", async () => {
+            await User.create({
+                firstname: "test_firstname",
+                lastname: "test_lastname",
+                email: "test@email.com",
+                password: await hasher.encryptPassword("boozai123")
+            });
+
+            const payload = {
+                email: "test@email.com"
+            };
+            const response = await request(server)
+                .post(`${baseURL}/forgot-password`)
+                .send(payload);
+            expect(response.status).toEqual(200);
+            expect(response.body.message).toMatch(/Please check your email/);
+        });
     })
 
 
