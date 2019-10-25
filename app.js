@@ -3,16 +3,18 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
-
-// Connect to the database
-const Database = require("./config/database/Database");
-const connectionString = require("./config/database/connection");
-new Database(connectionString).connect();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger');
 
 //Pull in custom modules
+const Database = require("./config/database/Database");
 const response = require("./utility/response");
 const winston = require("./config/logger/winston");
 const errorHandler = require("./utility/error-handler");
+
+// Connect to the database
+const connectionString = require("./config/database/connection");
+new Database(connectionString).connect();
 
 //Import routers
 const {userRouter: userRouterV1} = require("./api/v1/routes");
@@ -23,8 +25,7 @@ const {searchRouter: searchRouterV1} = require("./api/v1/routes");
 
 //Initialize express application
 const app = express();
-
-// Use middlewares
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(morgan("combined", {stream: winston.stream}));
 app.use(express.json());
 app.use(bodyParser.json());

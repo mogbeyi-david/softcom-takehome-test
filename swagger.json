@@ -1,0 +1,726 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the DomJudge Api documentation",
+    "version": "1.0.0",
+    "title": "YourHonour API",
+    "contact": {
+      "email": "kingsley@l5lab.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "user",
+      "description": "Secured user-only calls"
+    },
+    {
+      "name": "user",
+      "description": "Operations available to regular users"
+    }
+  ],
+  "paths": {
+    "/user/signup": {
+      "post": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Create new user account",
+        "operationId": "createUser",
+        "description": "Create new user account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "New User Account",
+            "description": "new user account to create",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "user created"
+          },
+          "400": {
+            "description": "invalid input, object invalid",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          },
+          "409": {
+            "description": "an existing item already exists"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Login an existing user",
+        "operationId": "login",
+        "description": "Login to an existing user account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Login a user",
+            "description": "User login details",
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user login",
+            "schema": {
+              "$ref": "#/definitions/UserLoginCookies"
+            }
+          },
+          "400": {
+            "description": "invalid username or password",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          }
+        }
+      }
+    },
+    "/user/update/": {
+      "put": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "update an existing user",
+        "operationId": "profile update",
+        "description": "Update an existing user account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "update a user details",
+            "description": "User update details",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile updated",
+            "schema": {
+              "$ref": "#/definitions/UserLoginCookies"
+            }
+          },
+          "302": {
+            "description": "User not logged in (Redirect)"
+          },
+          "400": {
+            "description": "invalid object",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          }
+        }
+      }
+    },
+    "/user/logout/": {
+      "delete": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Logout a logged in user",
+        "operationId": "logout",
+        "description": "Logout to an existing user account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Logout a user",
+            "description": "User cookies",
+            "schema": {
+              "$ref": "#/definitions/UserLoginCookies"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user logout",
+            "schema": {
+              "$ref": "#/definitions/UserLoginCookies"
+            }
+          }
+        }
+      }
+    },
+    "/user/lost-password/": {
+      "post": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Request lost an existing user password",
+        "operationId": "password Lost request",
+        "description": "Request lost an existing user account password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "request lost a user password",
+            "description": "Account email",
+            "schema": {
+              "$ref": "#/definitions/UserEmail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "password reset email sent"
+          },
+          "400": {
+            "description": "unable to dispatch password reset to email",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          },
+          "409": {
+            "description": "invalid email"
+          }
+        }
+      }
+    },
+    "/user/reset-password/:key/": {
+      "post": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Reset an existing user password",
+        "operationId": "password reset",
+        "description": "Reset an existing user account password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "key",
+            "description": "password the token send the user email address",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "reset a user password",
+            "description": "Account email",
+            "schema": {
+              "$ref": "#/definitions/NewUserpassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "password reset email successful"
+          },
+          "400": {
+            "description": "unable to update password",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          },
+          "409": {
+            "description": "invalid token"
+          }
+        }
+      }
+    },
+    "/user/delete": {
+      "delete": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Delete an existing user account",
+        "operationId": "delete account",
+        "description": "Delete an existing user account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Logout a user",
+            "description": "User cookies",
+            "schema": {
+              "$ref": "#/definitions/UserLoginCookies"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account Deleted"
+          },
+          "400": {
+            "description": "record not found",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          }
+        }
+      }
+    },
+    "/task/create": {
+      "post": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Create a new task",
+        "operationId": "Task creation",
+        "description": "Add a new task",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Create a new task",
+            "description": "Task creation",
+            "schema": {
+              "$ref": "#/definitions/task"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task Successfully Created",
+            "schema": {
+              "$ref": "#/definitions/UserLoginCookies"
+            }
+          },
+          "302": {
+            "description": "User not logged in (Redirect)"
+          },
+          "400": {
+            "description": "invalid object",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          }
+        }
+      }
+    },
+    "/api/add/:userName/:taskName": {
+      "post": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Attach a user to a task",
+        "operationId": "Attach user to task",
+        "description": "If a task is closed, a user must be attached to the task before he can solve it and this is the endpoint to carry out that attachment",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "boolean"
+        ],
+        "responses": {
+          "400": {
+            "description": "User or Task not found",
+            "schema": {
+              "$ref": "#/definitions/errors"
+            }
+          },
+          "200": {
+            "description": "User attached successfully",
+            "schema": {
+              "$ref": "#/definitions/attachUserToTask"
+            }
+          }
+        }
+      }
+    },
+    "/user/show": {
+      "get": {
+        "tags": [
+          "admins"
+        ],
+        "summary": "Display all users",
+        "operationId": "Get users",
+        "description": "Get all users",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Users fetched successfully",
+            "schema": {
+              "$ref": "#/definitions/UserLoginCookies"
+            }
+          },
+          "404": {
+            "description": "Page not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "user",
+        "email",
+        "password",
+        "firstname",
+        "lastname",
+        "state"
+      ],
+      "properties": {
+        "user": {
+          "type": "string",
+          "uniqueItems": true,
+          "minLength": 3,
+          "maxLength": 20
+        },
+        "email": {
+          "type": "string",
+          "uniqueItems": true,
+          "minLength": 3,
+          "maxLength": 20,
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "uniqueItems": true,
+          "minLength": 7,
+          "maxLength": 20,
+          "format": "password"
+        },
+        "firstname": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 20
+        },
+        "lastname": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 20
+        },
+        "state": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 20
+        },
+        "createdOn": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "location": {
+          "$ref": "#/definitions/location"
+        },
+        "task": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/task"
+          }
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "required": [
+        "user",
+        "password"
+      ],
+      "properties": {
+        "user": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string",
+          "uniqueItems": true,
+          "format": "password"
+        },
+        "remember-me": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserLoginCookies": {
+      "type": "object",
+      "required": [
+        "cookies"
+      ],
+      "properties": {
+        "cookies": {
+          "type": "string",
+          "uniqueItems": true
+        }
+      }
+    },
+    "UserEmail": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true
+        }
+      }
+    },
+    "NewUserpassword": {
+      "type": "object",
+      "required": [
+        "password"
+      ],
+      "properties": {
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "required": [
+        "streetName",
+        "state",
+        "streetNo",
+        "localGov",
+        "country"
+      ],
+      "properties": {
+        "streetName": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "streetNo": {
+          "type": "string"
+        },
+        "localGov": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "submissions": {
+      "type": "object",
+      "required": [
+        "testCasePassed",
+        "testCasesFailed",
+        "Subsolution",
+        "isFinal"
+      ],
+      "properties": {
+        "testCasePassed": {
+          "type": "number"
+        },
+        "testCasesFailed": {
+          "type": "number"
+        },
+        "timeSubmitted": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Subsolution": {
+          "type": "string"
+        },
+        "isFinal": {
+          "type": "boolean"
+        }
+      }
+    },
+    "difficultLevel": {
+      "type": "object",
+      "required": [
+        "levelName",
+        "levelDescription",
+        "levelNumber",
+        "isActive"
+      ],
+      "properties": {
+        "levelName": {
+          "type": "string"
+        },
+        "levelDescription": {
+          "type": "string"
+        },
+        "levelNumber": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "isActive": {
+          "type": "boolean"
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "required": [
+        "taskName",
+        "taskDescription",
+        "testCase",
+        "taskLanguage",
+        "createdOn",
+        "isActive",
+        "difficultLevel",
+        "editedOn",
+        "submissions"
+      ],
+      "properties": {
+        "taskName": {
+          "type": "string"
+        },
+        "taskDescription": {
+          "type": "string"
+        },
+        "testCase": {
+          "type": "string"
+        },
+        "taskLanguage": {
+          "type": "string"
+        },
+        "createdOn": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "difficultLevel": {
+          "$ref": "#/definitions/difficultLevel"
+        },
+        "editedOn": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "submissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/submissions"
+          }
+        },
+        "user": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        }
+      }
+    },
+    "attachUserToTask": {
+      "type": "string"
+    },
+    "getAllUsers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/User"
+      }
+    },
+    "errors": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            },
+            "errorName": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "_message": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/iohubs/DomJudge/1.0.0",
+  "host": "virtserver.swaggerhub.com"
+}
