@@ -23,7 +23,7 @@
     "/users": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Create new user account",
         "operationId": "create-user",
@@ -46,20 +46,20 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": "User created successfully"
+          "200": {
+            "description": "Success"
           },
           "400": {
-            "description": "There is something wrong with the request payload"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Something is wrong on the server, not your fault"
+            "description": "Internal Server Error"
           }
         }
       },
       "get": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Get all users",
         "operationId": "get-users",
@@ -69,10 +69,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Users fetched successfully"
+            "description": "Success"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -80,7 +80,7 @@
     "/users/login": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Login a user",
         "operationId": "login",
@@ -104,13 +104,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Login successful"
+            "description": "Success"
           },
           "400": {
-            "description": "There is something wrong with the request payload"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Something is wrong on the server, not your fault"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -118,7 +118,7 @@
     "/users/forgot-password": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Recover forgotten password",
         "operationId": "forgot-password",
@@ -142,13 +142,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Please check your email for further instructions on resetting your password"
+            "description": "Success"
           },
           "400": {
-            "description": "There is something wrong with the request payload"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Oops! Something went wrong."
+            "description": "Internal Server Error"
           }
         }
       }
@@ -156,7 +156,7 @@
     "/users/reset-password": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Reset a user's password",
         "operationId": "reset-password",
@@ -185,13 +185,16 @@
         ],
         "responses": {
           "200": {
-            "description": "password reset email successful"
+            "description": "Success"
           },
           "400": {
-            "description": "Something is wrong with the request payload"
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -199,7 +202,7 @@
     "/users/{id}": {
       "get": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Get one user",
         "operationId": "get-user",
@@ -220,22 +223,19 @@
         ],
         "responses": {
           "200": {
-            "description": "Single user gotten successfully"
-          },
-          "400": {
-            "description": "Something is wrong with the request payload"
+            "description": "Success"
           },
           "404": {
-            "description": "User not found"
+            "description": "Not found"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "update a user's details",
         "operationId": "update-user",
@@ -264,10 +264,10 @@
         ],
         "responses": {
           "200": {
-            "description": "user profile updated"
+            "description": "Success"
           },
           "400": {
-            "description": "invalid object"
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -276,7 +276,7 @@
             "description": "Forbidden"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -315,13 +315,13 @@
         ],
         "responses": {
           "201": {
-            "description": "Question created successfully"
+            "description": "Created"
           },
           "400": {
-            "description": "There is something wrong with the request payload"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       },
@@ -337,10 +337,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Questions fetched successfully"
+            "description": "Success"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -369,16 +369,16 @@
         ],
         "responses": {
           "200": {
-            "description": "Single question gotten successfully"
+            "description": "Success"
           },
           "400": {
-            "description": "Something is wrong with the request payload"
+            "description": "Bad Request"
           },
           "404": {
-            "description": "User not found"
+            "description": "Not Found"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       },
@@ -413,10 +413,10 @@
         ],
         "responses": {
           "200": {
-            "description": "user profile updated"
+            "description": "Success"
           },
           "400": {
-            "description": "invalid object"
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -425,7 +425,7 @@
             "description": "Forbidden"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -444,6 +444,13 @@
         "produces": [
           "application/json"
         ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -455,21 +462,21 @@
             "in": "query",
             "name": "up",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
           "200": {
-            "description": "Single question gotten successfully"
+            "description": "Success"
           },
           "400": {
-            "description": "Something is wrong with the request payload"
+            "description": "Bad Request"
           },
           "404": {
-            "description": "User not found"
+            "description": "Not Found"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -498,23 +505,23 @@
         "parameters": [
           {
             "in": "body",
-            "name": "question",
-            "description": "new question to be asked",
+            "name": "answer",
+            "description": "answer to question",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Question"
+              "$ref": "#/definitions/Answer"
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Question created successfully"
+            "description": "Created"
           },
           "400": {
-            "description": "There is something wrong with the request payload"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       },
@@ -530,10 +537,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Questions fetched successfully"
+            "description": "Success"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -551,10 +558,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Questions fetched successfully"
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -587,18 +597,25 @@
             "type": "string"
           }
         ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Single question gotten successfully"
+            "description": "Success"
           },
           "400": {
-            "description": "Something is wrong with the request payload"
+            "description": "Bad Request"
           },
           "404": {
-            "description": "User not found"
+            "description": "Not Found"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -627,16 +644,16 @@
         ],
         "responses": {
           "200": {
-            "description": "Single question gotten successfully"
+            "description": "Success"
           },
           "400": {
-            "description": "Something is wrong with the request payload"
+            "description": "Bad Request"
           },
           "404": {
-            "description": "User not found"
+            "description": "Not Found"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       },
@@ -671,10 +688,10 @@
         ],
         "responses": {
           "200": {
-            "description": "user profile updated"
+            "description": "Success"
           },
           "400": {
-            "description": "invalid object"
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -683,7 +700,7 @@
             "description": "Forbidden"
           },
           "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -722,32 +739,13 @@
         ],
         "responses": {
           "201": {
-            "description": "Question created successfully"
+            "description": "Created"
           },
           "400": {
-            "description": "There is something wrong with the request payload"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "Oops! Something went wrong"
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Answers"
-        ],
-        "summary": "Get all answers",
-        "operationId": "get-answers",
-        "description": "Get all answers",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "Questions fetched successfully"
-          },
-          "500": {
-            "description": "Oops! Something went wrong"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -772,6 +770,13 @@
             "name": "id",
             "required": true,
             "type": "string"
+          }
+        ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
           }
         ],
         "responses": {

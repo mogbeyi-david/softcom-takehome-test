@@ -6,11 +6,11 @@ const authMiddleware = require("../../../middlewares/auth");
 const validateObjectIdMiddleware = require("../../../middlewares/validate-objectId");
 
 //Post Requests
-router.post("/", authMiddleware, AnswerController.create);
+router.post("/", [authMiddleware], AnswerController.create);
 
 // Get Requests
-router.get("/question/:id", AnswerController.findAllForQuestion);
-router.get("/:id", AnswerController.findOne);
+router.get("/question/:id", [validateObjectIdMiddleware],AnswerController.findAllForQuestion);
+router.get("/:id", [validateObjectIdMiddleware],AnswerController.findOne);
 router.get("/", AnswerController.findAll);
 
 router.put("/:id/vote", [validateObjectIdMiddleware, authMiddleware], VoteController.voteAnswer);

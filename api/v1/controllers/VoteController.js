@@ -19,7 +19,7 @@ class VoteController {
 		const {id} = req.params;
 		const {up} = req.query;
 		let message;
-		handleCall((async () => {
+		return handleCall((async () => {
 			const answer = await AnswerRepository.findOne(id);
 			if (!answer) {
 				return response.sendError({res, statusCode: status.NOT_FOUND, message: "Answer not found"});
@@ -33,14 +33,14 @@ class VoteController {
 			}
 			const result = await answer.save();
 			return response.sendSuccess({res, message, body: result});
-		}));
+		}), next);
 	}
 
 	async voteQuestion(req, res, next) {
 		const {id} = req.params;
 		const {up} = req.query;
 		let message;
-		handleCall((async () => {
+		return handleCall((async () => {
 			const question = await QuestionRepository.findOne(id);
 			if (!question) {
 				return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
@@ -54,7 +54,7 @@ class VoteController {
 			}
 			const result = await question.save();
 			return response.sendSuccess({res, message, body: result});
-		}));
+		}), next);
 	}
 }
 
