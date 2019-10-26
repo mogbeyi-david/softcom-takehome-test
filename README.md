@@ -1,6 +1,6 @@
 # stack-overflow-lite-api
 
-| Left-aligned | Center-aligned   |
+| PROJECT FEATURE | STATUS   |
 | :---         |     :---:         | 
 | User Sign up   | :heavy_check_mark:| 
 | User Sign in     | :heavy_check_mark:| 
