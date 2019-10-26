@@ -1,5 +1,9 @@
 # stack-overflow-lite-api
 
+Function | MySQL / MariaDB | PostgreSQL | SQLite
+:------------ | :-------------| :-------------| :-------------
+substr | :heavy_check_mark: |  :white_check_mark: | :heavy_check_mark:
+
 > API that implements the basic features of stack overflow
 
 - Authentication via [JWT](https://jwt.io/)
