@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is the DomJudge Api documentation",
+    "description": "An application that implements the basic features of stack overflow",
     "version": "1.0.0",
-    "title": "YourHonour API",
+    "title": "Softcom Take Home Test",
     "contact": {
-      "email": "kingsley@l5lab.com"
+      "email": "mogbeyidavid@gmail.com"
     },
     "license": {
       "name": "Apache 2.0",
@@ -14,23 +14,19 @@
   },
   "tags": [
     {
-      "name": "user",
-      "description": "Secured user-only calls"
-    },
-    {
-      "name": "user",
-      "description": "Operations available to regular users"
+      "name": "User",
+      "description": "Operations carried out on the user resource"
     }
   ],
   "paths": {
-    "/user/signup": {
+    "/users": {
       "post": {
         "tags": [
-          "admins"
+          "users"
         ],
         "summary": "Create new user account",
         "operationId": "createUser",
-        "description": "Create new user account",
+        "description": "Creates a new user by taking the firstname, lastname, email and password",
         "consumes": [
           "application/json"
         ],
@@ -49,16 +45,13 @@
         ],
         "responses": {
           "201": {
-            "description": "user created"
+            "description": "User created successfully"
           },
           "400": {
-            "description": "invalid input, object invalid",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
+            "description": "There is something wrong with the request payload"
           },
-          "409": {
-            "description": "an existing item already exists"
+          "500": {
+            "description": "Something is wrong on the server, not your fault"
           }
         }
       }
@@ -406,64 +399,28 @@
     "User": {
       "type": "object",
       "required": [
-        "user",
-        "email",
-        "password",
         "firstname",
         "lastname",
-        "state"
+        "email",
+        "password"
       ],
       "properties": {
-        "user": {
-          "type": "string",
-          "uniqueItems": true,
-          "minLength": 3,
-          "maxLength": 20
-        },
         "email": {
           "type": "string",
           "uniqueItems": true,
-          "minLength": 3,
-          "maxLength": 20,
           "format": "email"
         },
         "password": {
           "type": "string",
-          "uniqueItems": true,
-          "minLength": 7,
-          "maxLength": 20,
+          "minLength": 3,
+          "maxLength": 30,
           "format": "password"
         },
         "firstname": {
-          "type": "string",
-          "minLength": 3,
-          "maxLength": 20
+          "type": "string"
         },
         "lastname": {
-          "type": "string",
-          "minLength": 3,
-          "maxLength": 20
-        },
-        "state": {
-          "type": "string",
-          "minLength": 3,
-          "maxLength": 20
-        },
-        "createdOn": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "isActive": {
-          "type": "boolean"
-        },
-        "location": {
-          "$ref": "#/definitions/location"
-        },
-        "task": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/task"
-          }
+          "type": "string"
         }
       }
     },
@@ -719,8 +676,8 @@
     }
   },
   "schemes": [
-    "https"
+    "http"
   ],
-  "basePath": "/iohubs/DomJudge/1.0.0",
-  "host": "virtserver.swaggerhub.com"
+  "basePath": "/api/v1",
+  "host": "206.189.227.235:3000"
 }

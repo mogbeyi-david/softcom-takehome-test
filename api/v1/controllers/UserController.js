@@ -11,112 +11,114 @@ const handleCall = require("../../../helper/handleCall");
 
 class UserController {
 
-	/**
+    /**
+     * @Author David Mogbeyi
+     * @Responsibility: Creates a new user
      *
      * @param req
      * @param res
      * @param next
      * @returns {Promise<*>}
      */
-	async create(req, res, next) {
+    async create(req, res, next) {
 
-		const {error} = validateCreateUser(req.body);
-		if (error) {
-			return response.sendError({res, message: error.details[0].message});
-		}
-		let {firstname, lastname, email, password} = req.body;
-		handleCall((async () => {
-			const existingUser = await UserRepository.findByEmail(email);
-			if (existingUser) {
-				return response.sendError({res, message: "User already exists"});
-			}
-			password = await hasher.encryptPassword(password);
-			const result = await UserRepository.create({firstname, lastname, email, password});
-			const user = _.pick(result, ["_id", "firstname", "lastname", "email"]);
-			return response.sendSuccess({
-				res,
-				message: "User created successfully",
-				body: user,
-				statusCode: status.CREATED
-			});
-		}));
-	}
+        const {error} = validateCreateUser(req.body); // Check if the request payload meets specifications
+        if (error) {
+            return response.sendError({res, message: error.details[0].message});
+        }
+        let {firstname, lastname, email, password} = req.body;
+        handleCall((async () => {
+            const existingUser = await UserRepository.findByEmail(email);
+            if (existingUser) {
+                return response.sendError({res, message: "User already exists"});
+            }
+            password = await hasher.encryptPassword(password);
+            const result = await UserRepository.create({firstname, lastname, email, password});
+            const user = _.pick(result, ["_id", "firstname", "lastname", "email"]);
+            return response.sendSuccess({
+                res,
+                message: "User created successfully",
+                body: user,
+                statusCode: status.CREATED
+            });
+        }));
+    }
 
-	/**
+    /**
      *
      * @param req
      * @param res
      * @param next
      * @returns {Promise<*>}
      */
-	async getAll(req, res, next) {
-		handleCall((async () => {
-			const users = await UserRepository.findAll();
-			return response.sendSuccess({res, body: users});
-		}));
+    async getAll(req, res, next) {
+        handleCall((async () => {
+            const users = await UserRepository.findAll();
+            return response.sendSuccess({res, body: users});
+        }));
 
-	}
+    }
 
-	/**
+    /**
      *
      * @param req
      * @param res
      * @param next
      * @returns {Promise<*>}
      */
-	async getOne(req, res, next) {
-		handleCall((async () => {
-			const {id} = req.params;
-			const user = await UserRepository.findOne(id);
-			if (!user) {
-				return response.sendError({res, message: "User not found", statusCode: status.NOT_FOUND});
-			}
-			return response.sendSuccess({res, body: user});
-		}));
-	}
+    async getOne(req, res, next) {
+        handleCall((async () => {
+            const {id} = req.params;
+            const user = await UserRepository.findOne(id);
+            if (!user) {
+                return response.sendError({res, message: "User not found", statusCode: status.NOT_FOUND});
+            }
+            return response.sendSuccess({res, body: user});
+        }));
+    }
 
-	/**
+    /**
      *
      * @param req
      * @param res
      * @param next
      * @returns {Promise<*>}
      */
-	async update(req, res, next) {
+    async update(req, res, next) {
 
-		try {
+        try {
 
-			const {error} = validateUpdateUser(req.body);
-			if (error) return response.sendError({res, message: error.details[0].message});
+            const {error} = validateUpdateUser(req.body);
+            if (error) return response.sendError({res, message: error.details[0].message});
 
-			let {id} = req.params;
-			let {firstname, lastname, email, oldPassword, newPassword, confirmNewPassword} = req.body;
-			const existingUser = await UserRepository.findOne(id);
-			if (!existingUser) {
-				return response.sendError({res, message: "User does not exist", statusCode: status.NOT_FOUND});
-			}
+            let {id} = req.params;
+            let {firstname, lastname, email, oldPassword, newPassword, confirmNewPassword} = req.body;
+            const existingUser = await UserRepository.findOne(id);
+            if (!existingUser) {
+                return response.sendError({res, message: "User does not exist", statusCode: status.NOT_FOUND});
+            }
 
-			if (newPassword !== confirmNewPassword) return response.sendError({res, message: "Passwords do not match"});
+            if (newPassword !== confirmNewPassword) return response.sendError({res, message: "Passwords do not match"});
 
-			if (newPassword !== "") {
-				if (!await hasher.comparePasswords(oldPassword, existingUser.password)) {
-					return response.sendError({res, message: "Old password is not correct"});
-				}
-				if (!/^[a-zA-Z0-9]{3,30}$/.test(newPassword)) {
-					return response.sendError({res, message: "Password is not secure enough"});
-				}
-			}
-			let user = {firstname, lastname, email};
-			if (newPassword) {
-				user.password = newPassword;
-			}
-			const result = await UserRepository.update(user, id);
-			user = _.pick(result, ["firstname", "lastname", "email"]);
-			return response.sendSuccess({res, message: "User details updated successfully", body: user});
-		} catch (e) {
-			next(e);
-		}
-	}
+            if (newPassword !== "") {
+                if (!await hasher.comparePasswords(oldPassword, existingUser.password)) {
+                    return response.sendError({res, message: "Old password is not correct"});
+                }
+                if (!/^[a-zA-Z0-9]{3,30}$/.test(newPassword)) {
+                    return response.sendError({res, message: "Password is not secure enough"});
+                }
+            }
+            let user = {firstname, lastname, email};
+            if (newPassword) {
+                user.password = newPassword;
+            }
+            const result = await UserRepository.update(user, id);
+            user = _.pick(result, ["firstname", "lastname", "email"]);
+            return response.sendSuccess({res, message: "User details updated successfully", body: user});
+        } catch (e) {
+            next(e);
+        }
+    }
 
 }
 
