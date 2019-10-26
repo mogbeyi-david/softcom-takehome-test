@@ -1,4 +1,6 @@
 # stack-overflow-lite-api
+> API that implements the basic features of stack overflow
+
 
 | PROJECT FEATURE | STATUS   |
 | :---         |     :---:         | 
@@ -18,9 +20,7 @@
 | Automated Pull Request Validation based on ESLint     | :white_check_mark:| 
 | Test Coverage Reporting     | :white_check_mark:| 
 
-> API that implements the basic features of stack overflow
-
-- Authentication via [JWT](https://jwt.io/)
+- :cop: Authentication via [JWT](https://jwt.io/)
 - Routes mapping via [express-router](https://expressjs.com/en/guide/routing.html)
 - Documented using [Swagger](https://swagger.io). Find link to docs [here](http://206.189.227.235:3000/api-docs)
 - Background operations are run on [stack-overflow-lite-background-service](https://github.com/mogbeyi-david/softcom-interview-background-service.git). This is private repo and will return 404 if you do not have access
