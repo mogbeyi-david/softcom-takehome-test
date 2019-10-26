@@ -680,7 +680,8 @@ This command:
 - runs `jest --coverage --runInBand` for testing with [Jest](https://github.com/facebook/jest) and the coverage
 - drops the `test database` after the test
 
-![Image showing test coverage](https://drive.google.com/file/d/1HBdgpCtODJK8bAK_6g8wM8CH-5-lqR0D/preview)
+![Image showing test coverage](
+ emmywonder@Emmys-MacBook-Pro  ~/Documents/softcom-takehome-test  )
 
 ## npm run production
 
