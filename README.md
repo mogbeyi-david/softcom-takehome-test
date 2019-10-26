@@ -2,20 +2,20 @@
 
 | Left-aligned | Center-aligned   |
 | :---         |     :---:         | 
-| git status   | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
-| git diff     | :heavy_check_mark:| 
+| User Sign up   | :heavy_check_mark:| 
+| User Sign in     | :heavy_check_mark:| 
+| Ask Questions     | :heavy_check_mark:| 
+| View Questions     | :heavy_check_mark:| 
+| Upvote or Downvotes questions     | :heavy_check_mark:| 
+| Answer Questions     | :heavy_check_mark:| 
+| Search (Elastic Search)     | :heavy_check_mark:| 
+| Subscribe to Questions     | :heavy_check_mark:| 
+| Test Driven Development     | :heavy_check_mark:| 
+| CI/CD     | :heavy_check_mark:| 
+| Background Operations     | :heavy_check_mark:| 
+| Full Question Resource     | :heavy_check_mark:| 
+| Full Answer Resource     | :heavy_check_mark:| 
+| Full User Resource     | :heavy_check_mark:| 
 
 > API that implements the basic features of stack overflow
 
