@@ -1,36 +1,33 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is the DomJudge Api documentation",
+    "description": "An application that implements the basic features of stack overflow",
     "version": "1.0.0",
-    "title": "YourHonour API",
+    "title": "Softcom Take Home Test",
     "contact": {
-      "email": "kingsley@l5lab.com"
+      "email": "mogbeyidavid@gmail.com"
     },
     "license": {
       "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "tags": [
-    {
-      "name": "user",
-      "description": "Secured user-only calls"
-    },
-    {
-      "name": "user",
-      "description": "Operations available to regular users"
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "x-auth-token",
+      "in": "header"
     }
-  ],
+  },
   "paths": {
-    "/user/signup": {
+    "/users": {
       "post": {
         "tags": [
-          "admins"
+          "User"
         ],
         "summary": "Create new user account",
-        "operationId": "createUser",
-        "description": "Create new user account",
+        "operationId": "create-user",
+        "description": "Creates a new user by taking the firstname, lastname, email and password",
         "consumes": [
           "application/json"
         ],
@@ -42,6 +39,7 @@
             "in": "body",
             "name": "New User Account",
             "description": "new user account to create",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/User"
             }
@@ -49,26 +47,42 @@
         ],
         "responses": {
           "201": {
-            "description": "user created"
+            "description": "User created successfully"
           },
           "400": {
-            "description": "invalid input, object invalid",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
+            "description": "There is something wrong with the request payload"
           },
-          "409": {
-            "description": "an existing item already exists"
+          "500": {
+            "description": "Something is wrong on the server, not your fault"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get all users",
+        "operationId": "get-users",
+        "description": "Get all users",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Users fetched successfully"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
           }
         }
       }
     },
-    "/user": {
+    "/users/login": {
       "post": {
         "tags": [
-          "admins"
+          "User"
         ],
-        "summary": "Login an existing user",
+        "summary": "Login a user",
         "operationId": "login",
         "description": "Login to an existing user account",
         "consumes": [
@@ -81,7 +95,8 @@
           {
             "in": "body",
             "name": "Login a user",
-            "description": "User login details",
+            "required": true,
+            "description": "Login using email and password",
             "schema": {
               "$ref": "#/definitions/UserLogin"
             }
@@ -89,105 +104,25 @@
         ],
         "responses": {
           "200": {
-            "description": "user login",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
+            "description": "Login successful"
           },
           "400": {
-            "description": "invalid username or password",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
-          }
-        }
-      }
-    },
-    "/user/update/": {
-      "put": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "update an existing user",
-        "operationId": "profile update",
-        "description": "Update an existing user account",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "update a user details",
-            "description": "User update details",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "user profile updated",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
+            "description": "There is something wrong with the request payload"
           },
-          "302": {
-            "description": "User not logged in (Redirect)"
-          },
-          "400": {
-            "description": "invalid object",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
+          "500": {
+            "description": "Something is wrong on the server, not your fault"
           }
         }
       }
     },
-    "/user/logout/": {
-      "delete": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "Logout a logged in user",
-        "operationId": "logout",
-        "description": "Logout to an existing user account",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "Logout a user",
-            "description": "User cookies",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "user logout",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
-          }
-        }
-      }
-    },
-    "/user/lost-password/": {
+    "/users/forgot-password": {
       "post": {
         "tags": [
-          "admins"
+          "User"
         ],
-        "summary": "Request lost an existing user password",
-        "operationId": "password Lost request",
-        "description": "Request lost an existing user account password",
+        "summary": "Recover forgotten password",
+        "operationId": "forgot-password",
+        "description": "Send registered email to receive instructions to reset password",
         "consumes": [
           "application/json"
         ],
@@ -197,7 +132,8 @@
         "parameters": [
           {
             "in": "body",
-            "name": "request lost a user password",
+            "name": "email",
+            "required": true,
             "description": "Account email",
             "schema": {
               "$ref": "#/definitions/UserEmail"
@@ -206,28 +142,25 @@
         ],
         "responses": {
           "200": {
-            "description": "password reset email sent"
+            "description": "Please check your email for further instructions on resetting your password"
           },
           "400": {
-            "description": "unable to dispatch password reset to email",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
+            "description": "There is something wrong with the request payload"
           },
-          "409": {
-            "description": "invalid email"
+          "500": {
+            "description": "Oops! Something went wrong."
           }
         }
       }
     },
-    "/user/reset-password/:key/": {
+    "/users/reset-password": {
       "post": {
         "tags": [
-          "admins"
+          "User"
         ],
-        "summary": "Reset an existing user password",
-        "operationId": "password reset",
-        "description": "Reset an existing user account password",
+        "summary": "Reset a user's password",
+        "operationId": "reset-password",
+        "description": "Reset a user's password",
         "consumes": [
           "application/json"
         ],
@@ -237,15 +170,14 @@
         "parameters": [
           {
             "in": "query",
-            "name": "key",
-            "description": "password the token send the user email address",
+            "name": "email",
             "required": true,
             "type": "string"
           },
           {
             "in": "body",
-            "name": "reset a user password",
-            "description": "Account email",
+            "name": "Password",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/NewUserpassword"
             }
@@ -256,147 +188,604 @@
             "description": "password reset email successful"
           },
           "400": {
-            "description": "unable to update password",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
+            "description": "Something is wrong with the request payload"
           },
-          "409": {
-            "description": "invalid token"
+          "500": {
+            "description": "Oops! Something went wrong"
           }
         }
       }
     },
-    "/user/delete": {
-      "delete": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "Delete an existing user account",
-        "operationId": "delete account",
-        "description": "Delete an existing user account",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "Logout a user",
-            "description": "User cookies",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Account Deleted"
-          },
-          "400": {
-            "description": "record not found",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
-          }
-        }
-      }
-    },
-    "/task/create": {
-      "post": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "Create a new task",
-        "operationId": "Task creation",
-        "description": "Add a new task",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "Create a new task",
-            "description": "Task creation",
-            "schema": {
-              "$ref": "#/definitions/task"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Task Successfully Created",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
-          },
-          "302": {
-            "description": "User not logged in (Redirect)"
-          },
-          "400": {
-            "description": "invalid object",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
-          }
-        }
-      }
-    },
-    "/api/add/:userName/:taskName": {
-      "post": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "Attach a user to a task",
-        "operationId": "Attach user to task",
-        "description": "If a task is closed, a user must be attached to the task before he can solve it and this is the endpoint to carry out that attachment",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "boolean"
-        ],
-        "responses": {
-          "400": {
-            "description": "User or Task not found",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
-          },
-          "200": {
-            "description": "User attached successfully",
-            "schema": {
-              "$ref": "#/definitions/attachUserToTask"
-            }
-          }
-        }
-      }
-    },
-    "/user/show": {
+    "/users/{id}": {
       "get": {
         "tags": [
-          "admins"
+          "User"
         ],
-        "summary": "Display all users",
-        "operationId": "Get users",
-        "description": "Get all users",
+        "summary": "Get one user",
+        "operationId": "get-user",
+        "description": "Get one user",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single user gotten successfully"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "update a user's details",
+        "operationId": "update-user",
+        "description": "Update an existing user account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "update a user details",
+            "description": "User update details",
+            "schema": {
+              "$ref": "#/definitions/UpdateUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile updated"
+          },
+          "400": {
+            "description": "invalid object"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/questions": {
+      "post": {
+        "tags": [
+          "Questions"
+        ],
+        "summary": "Ask a new question",
+        "operationId": "create-question",
+        "description": "Ask a new question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "question",
+            "description": "new question to be asked",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Question created successfully"
+          },
+          "400": {
+            "description": "There is something wrong with the request payload"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Questions"
+        ],
+        "summary": "Get all questions",
+        "operationId": "get-questions",
+        "description": "Get all questions",
         "produces": [
           "application/json"
         ],
         "responses": {
           "200": {
-            "description": "Users fetched successfully",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
+            "description": "Questions fetched successfully"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/questions/{id}": {
+      "get": {
+        "tags": [
+          "Questions"
+        ],
+        "summary": "Get one question",
+        "operationId": "get-question",
+        "description": "Get one question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single question gotten successfully"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
           },
           "404": {
-            "description": "Page not found"
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Questions"
+        ],
+        "summary": "update a question",
+        "operationId": "update-question",
+        "description": "Update a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "update a user details",
+            "description": "User update details",
+            "schema": {
+              "$ref": "#/definitions/UpdateQuestion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile updated"
+          },
+          "400": {
+            "description": "invalid object"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/questions/{id}/vote": {
+      "put": {
+        "tags": [
+          "Questions"
+        ],
+        "summary": "Up vote or Down vote a question",
+        "operationId": "vote-question",
+        "description": "Up vote or Down vote a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "up",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single question gotten successfully"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/answers": {
+      "post": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "Answer a question",
+        "operationId": "answer-question",
+        "description": "Answer a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "question",
+            "description": "new question to be asked",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Question created successfully"
+          },
+          "400": {
+            "description": "There is something wrong with the request payload"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "Get all answers",
+        "operationId": "get-answers",
+        "description": "Get all answers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions fetched successfully"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/answers/question/{id}": {
+      "get": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "Get all answers for a question",
+        "operationId": "get-answers-for-question",
+        "description": "Get all answers for a question",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions fetched successfully"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/answers/{id}/vote": {
+      "put": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "Up vote or Down vote an answer",
+        "operationId": "vote-answer",
+        "description": "Up vote or Down vote an answer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "up",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single question gotten successfully"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/answers/{id}": {
+      "get": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "Get one answer",
+        "operationId": "get-answer",
+        "description": "Get an answer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single question gotten successfully"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "update an answer",
+        "operationId": "update-answer",
+        "description": "Update a answer",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "update a user details",
+            "description": "User update details",
+            "schema": {
+              "$ref": "#/definitions/UpdateQuestion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile updated"
+          },
+          "400": {
+            "description": "invalid object"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/subscriptions/question": {
+      "post": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Subscribe to a question",
+        "operationId": "subscribe-question",
+        "description": "Subscribe to a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "question",
+            "description": "question to be subscribed to",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Question"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Question created successfully"
+          },
+          "400": {
+            "description": "There is something wrong with the request payload"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Answers"
+        ],
+        "summary": "Get all answers",
+        "operationId": "get-answers",
+        "description": "Get all answers",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Questions fetched successfully"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/subscriptions/question/{id}": {
+      "get": {
+        "tags": [
+          "Subscriptions"
+        ],
+        "summary": "Get subscriptions for a question",
+        "operationId": "get-question-subscriptions",
+        "description": "Get subscriptions for a question",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single question gotten successfully"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
           }
         }
       }
@@ -406,321 +795,146 @@
     "User": {
       "type": "object",
       "required": [
-        "user",
-        "email",
-        "password",
         "firstname",
         "lastname",
-        "state"
+        "email",
+        "password"
       ],
       "properties": {
-        "user": {
-          "type": "string",
-          "uniqueItems": true,
-          "minLength": 3,
-          "maxLength": 20
-        },
         "email": {
           "type": "string",
           "uniqueItems": true,
-          "minLength": 3,
-          "maxLength": 20,
           "format": "email"
         },
         "password": {
           "type": "string",
-          "uniqueItems": true,
-          "minLength": 7,
-          "maxLength": 20,
+          "minLength": 3,
+          "maxLength": 30,
           "format": "password"
         },
         "firstname": {
-          "type": "string",
-          "minLength": 3,
-          "maxLength": 20
+          "type": "string"
         },
         "lastname": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUser": {
+      "type": "object",
+      "required": [
+        "firstname",
+        "lastname",
+        "email"
+      ],
+      "properties": {
+        "email": {
           "type": "string",
-          "minLength": 3,
-          "maxLength": 20
+          "uniqueItems": true,
+          "format": "email"
         },
-        "state": {
-          "type": "string",
-          "minLength": 3,
-          "maxLength": 20
+        "firstname": {
+          "type": "string"
         },
-        "createdOn": {
-          "type": "string",
-          "format": "date-time"
+        "lastname": {
+          "type": "string"
         },
-        "isActive": {
-          "type": "boolean"
+        "oldPassword": {
+          "type": "string"
         },
-        "location": {
-          "$ref": "#/definitions/location"
+        "newPassword": {
+          "type": "string"
         },
-        "task": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/task"
-          }
+        "confirmNewPassword": {
+          "type": "string"
         }
       }
     },
     "UserLogin": {
       "type": "object",
       "required": [
-        "user",
+        "email",
         "password"
-      ],
-      "properties": {
-        "user": {
-          "type": "string",
-          "uniqueItems": true
-        },
-        "password": {
-          "type": "string",
-          "uniqueItems": true,
-          "format": "password"
-        },
-        "remember-me": {
-          "type": "boolean"
-        }
-      }
-    },
-    "UserLoginCookies": {
-      "type": "object",
-      "required": [
-        "cookies"
-      ],
-      "properties": {
-        "cookies": {
-          "type": "string",
-          "uniqueItems": true
-        }
-      }
-    },
-    "UserEmail": {
-      "type": "object",
-      "required": [
-        "email"
       ],
       "properties": {
         "email": {
           "type": "string",
           "uniqueItems": true
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
         }
       }
     },
     "NewUserpassword": {
       "type": "object",
       "required": [
-        "password"
+        "password",
+        "confirmPassword"
       ],
       "properties": {
-        "password": {
+        "newPassword": {
+          "type": "string",
+          "format": "password"
+        },
+        "confirmNewPassword": {
           "type": "string",
           "format": "password"
         }
       }
     },
-    "location": {
+    "Question": {
       "type": "object",
       "required": [
-        "streetName",
-        "state",
-        "streetNo",
-        "localGov",
-        "country"
+        "question"
       ],
       "properties": {
-        "streetName": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "streetNo": {
-          "type": "string"
-        },
-        "localGov": {
-          "type": "string"
-        },
-        "country": {
+        "question": {
           "type": "string"
         }
       }
     },
-    "submissions": {
+    "UpdateQuestion": {
       "type": "object",
       "required": [
-        "testCasePassed",
-        "testCasesFailed",
-        "Subsolution",
-        "isFinal"
+        "question"
       ],
       "properties": {
-        "testCasePassed": {
-          "type": "number"
-        },
-        "testCasesFailed": {
-          "type": "number"
-        },
-        "timeSubmitted": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "Subsolution": {
+        "question": {
           "type": "string"
-        },
-        "isFinal": {
-          "type": "boolean"
         }
       }
     },
-    "difficultLevel": {
+    "Answer": {
       "type": "object",
       "required": [
-        "levelName",
-        "levelDescription",
-        "levelNumber",
-        "isActive"
+        "question"
       ],
       "properties": {
-        "levelName": {
+        "question": {
           "type": "string"
         },
-        "levelDescription": {
+        "answer": {
           "type": "string"
-        },
-        "levelNumber": {
-          "type": "number",
-          "minimum": 1,
-          "maximum": 10
-        },
-        "isActive": {
-          "type": "boolean"
         }
       }
     },
-    "task": {
+    "UpdateAnswer": {
       "type": "object",
       "required": [
-        "taskName",
-        "taskDescription",
-        "testCase",
-        "taskLanguage",
-        "createdOn",
-        "isActive",
-        "difficultLevel",
-        "editedOn",
-        "submissions"
+        "answer"
       ],
       "properties": {
-        "taskName": {
-          "type": "string"
-        },
-        "taskDescription": {
-          "type": "string"
-        },
-        "testCase": {
-          "type": "string"
-        },
-        "taskLanguage": {
-          "type": "string"
-        },
-        "createdOn": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "isActive": {
-          "type": "boolean"
-        },
-        "difficultLevel": {
-          "$ref": "#/definitions/difficultLevel"
-        },
-        "editedOn": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "submissions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/submissions"
-          }
-        },
-        "user": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/User"
-          }
-        }
-      }
-    },
-    "attachUserToTask": {
-      "type": "string"
-    },
-    "getAllUsers": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/User"
-      }
-    },
-    "errors": {
-      "type": "object",
-      "properties": {
-        "state": {
-          "type": "object",
-          "properties": {
-            "message": {
-              "type": "string"
-            },
-            "errorName": {
-              "type": "string"
-            },
-            "kind": {
-              "type": "string"
-            },
-            "path": {
-              "type": "string"
-            },
-            "value": {
-              "type": "string"
-            },
-            "properties": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "path": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "_message": {
-          "type": "string"
-        },
-        "message": {
-          "type": "string"
-        },
-        "name": {
+        "question": {
           "type": "string"
         }
       }
     }
   },
   "schemes": [
-    "https"
+    "http"
   ],
-  "basePath": "/iohubs/DomJudge/1.0.0",
-  "host": "virtserver.swaggerhub.com"
+  "basePath": "/api/v1",
+  "host": "206.189.227.235:3000"
 }

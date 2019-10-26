@@ -33,7 +33,7 @@ app.use(cors());
 
 //Ping the API to ensure it is running.
 app.get("/health-check", (req, res) => {
-	return response.sendSuccess({res, message: "Health check passed"});
+	return response.sendSuccess({res, message: "Health checks passed"});
 });
 
 //Bind app entry points to routers
