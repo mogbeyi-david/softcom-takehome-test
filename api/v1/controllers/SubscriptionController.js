@@ -22,8 +22,9 @@ class SubscriptionController {
 		if (error) {
 			return response.sendError({res, message: error.details[0].message});
 		}
-		let {user, question} = req.body;
-		handleCall((async () => {
+		let {question} = req.body;
+		let {userId: user} = req.user;
+		return handleCall((async () => {
 			const existingUser = await UserRepository.findOne(user);
 			if (!existingUser) {
 				return response.sendError({res, statusCode: status.NOT_FOUND, message: "User does not exist"});
@@ -40,7 +41,7 @@ class SubscriptionController {
 				statusCode: status.CREATED,
 				body: newSubscription
 			});
-		}));
+		}), next);
 	}
 
 	/**
@@ -53,10 +54,10 @@ class SubscriptionController {
 	async getAllForQuestion(req, res, next) {
 
 		const {id} = req.params;
-		handleCall((async () => {
+		return handleCall((async () => {
 			const subscriptions = await SubscriptionRepository.getAllForQuestion(id);
 			return response.sendSuccess({res, body: subscriptions, message: "Subscriptions for question"});
-		}));
+		}), next);
 	}
 
 }

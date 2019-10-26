@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+require("express-async-errors");
 
 const mongoose = require('mongoose');
 let server;

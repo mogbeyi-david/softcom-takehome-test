@@ -27,7 +27,7 @@ class AuthController
             return response.sendError({res, message: error.details[0].message});
         }
         let {email, password} = req.body;
-        handleCall((async () => {
+        return handleCall((async () => {
             const user = await UserRepository.findByEmail(email);
             if (!user) {
                 return response.sendError(
@@ -57,7 +57,7 @@ class AuthController
      */
     async sendResetPasswordLink(req, res, next)
     {
-        handleCall((async () => {
+        return handleCall((async () => {
             const {email} = req.body;
             if (!email) return response.sendError(
                 {res, message: 'Email is required'});
@@ -80,7 +80,7 @@ class AuthController
      */
     async resetPassword(req, res, next)
     {
-        handleCall((async () => {
+        return handleCall((async () => {
             let {email} = req.query;
             if (!email) return response.sendError(
                 {res, message: 'Email is required'});

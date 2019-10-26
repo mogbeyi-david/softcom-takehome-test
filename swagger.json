@@ -23,7 +23,7 @@
     "/users": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Create new user account",
         "operationId": "create-user",
@@ -59,7 +59,7 @@
       },
       "get": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Get all users",
         "operationId": "get-users",
@@ -80,7 +80,7 @@
     "/users/login": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Login a user",
         "operationId": "login",
@@ -118,7 +118,7 @@
     "/users/forgot-password": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Recover forgotten password",
         "operationId": "forgot-password",
@@ -156,7 +156,7 @@
     "/users/reset-password": {
       "post": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Reset a user's password",
         "operationId": "reset-password",
@@ -190,6 +190,9 @@
           "400": {
             "description": "Bad Request"
           },
+          "404": {
+            "description": "Not Found"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -199,7 +202,7 @@
     "/users/{id}": {
       "get": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "Get one user",
         "operationId": "get-user",
@@ -222,9 +225,6 @@
           "200": {
             "description": "Success"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "404": {
             "description": "Not found"
           },
@@ -235,7 +235,7 @@
       },
       "put": {
         "tags": [
-          "User"
+          "Users"
         ],
         "summary": "update a user's details",
         "operationId": "update-user",
@@ -462,7 +462,7 @@
             "in": "query",
             "name": "up",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -505,11 +505,11 @@
         "parameters": [
           {
             "in": "body",
-            "name": "question",
-            "description": "new question to be asked",
+            "name": "answer",
+            "description": "answer to question",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Question"
+              "$ref": "#/definitions/Answer"
             }
           }
         ],
@@ -559,6 +559,9 @@
         "responses": {
           "200": {
             "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
@@ -938,5 +941,5 @@
     "http"
   ],
   "basePath": "/api/v1",
-  "host": "127.0.0.1"
+  "host": "206.189.227.235"
 }

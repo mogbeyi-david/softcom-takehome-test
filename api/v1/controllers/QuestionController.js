@@ -21,11 +21,12 @@ class QuestionController {
 			return response.sendError({res, message: error.details[0].message});
 		}
 		const {question} = req.body;
+		// Extract the userId from the request and alias it to user
 		const {userId: user} = req.user;
 		const newQuestion = {
 			question, user
 		};
-		handleCall((async () => {
+		return handleCall((async () => {
 			const question = await QuestionRepository.create(newQuestion);
 			return response.sendSuccess({
 				res,
@@ -33,7 +34,7 @@ class QuestionController {
 				message: "Question created successfully",
 				body: question
 			});
-		}));
+		}), next);
 	}
 
 	/**
@@ -44,10 +45,10 @@ class QuestionController {
      * @returns {Promise<*>}
      */
 	async getAll(req, res, next) {
-		handleCall((async () => {
+		return handleCall((async () => {
 			const questions = await QuestionRepository.findAll();
 			return response.sendSuccess({res, body: questions, message: "All questions"});
-		}));
+		}), next);
 	}
 
 	/**
@@ -60,13 +61,13 @@ class QuestionController {
 	async getOne(req, res, next) {
 
 		const {id} = req.params;
-		handleCall((async () => {
+		return handleCall((async () => {
 			const question = await QuestionRepository.findOne(id);
 			if (!question) {
 				return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
 			}
 			return response.sendSuccess({res, body: question, message: question.question});
-		}));
+		}), next);
 	}
 
 	/**
@@ -84,7 +85,7 @@ class QuestionController {
 			return response.sendError({res, message: error.details[0].message});
 		}
 		let {question: updatedQuestion} = req.body;
-		handleCall((async () => {
+		return handleCall((async () => {
 			const question = await QuestionRepository.findOne(id);
 			if (!question) {
 				return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
@@ -99,7 +100,7 @@ class QuestionController {
 				statusCode: status.UNAUTHORIZED,
 				message: "You do not have the right to update this question"
 			});
-		}));
+		}), next);
 	}
 }
 
