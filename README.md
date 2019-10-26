@@ -14,9 +14,9 @@
 | Continuous Integration and Continuous Deployment     | :heavy_check_mark:| 
 | Search (Elastic Search)     | :heavy_check_mark:| 
 | Micro service Architecture     | :heavy_check_mark:| 
-| Test Coverage Reporting     | :heavy_check_mark:| 
+| Background Services in RabbitMQ     | :heavy_check_mark:| 
 | Automated Pull Request Validation based on ESLint     | :heavy_check_mark:| 
-| Docker     | :heavy_check_mark:| 
+| Test Coverage Reporting     | :heavy_check_mark:| 
 
 > API that implements the basic features of stack overflow
 
