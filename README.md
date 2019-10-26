@@ -2,21 +2,21 @@
 
 | PROJECT FEATURE | STATUS   |
 | :---         |     :---:         | 
-| User Sign up   | :heavy_check_mark:| 
-| User Sign in     | :heavy_check_mark:| 
-| Ask Questions     | :heavy_check_mark:| 
-| View Questions     | :heavy_check_mark:| 
-| Upvote or Downvotes questions     | :heavy_check_mark:| 
-| Answer Questions     | :heavy_check_mark:| 
-| Upvote or Downvotes answers     | :heavy_check_mark:| 
-| Subscribe to Questions     | :heavy_check_mark:| 
-| Test Driven Development     | :heavy_check_mark:| 
-| Continuous Integration and Continuous Deployment     | :heavy_check_mark:| 
-| Search (Elastic Search)     | :heavy_check_mark:| 
-| Micro service Architecture     | :heavy_check_mark:| 
-| Background Services in RabbitMQ     | :heavy_check_mark:| 
-| Automated Pull Request Validation based on ESLint     | :heavy_check_mark:| 
-| Test Coverage Reporting     | :heavy_check_mark:| 
+| User Sign up   | :white_check_mark:| 
+| User Sign in     | :white_check_mark:| 
+| Ask Questions     | :white_check_mark:| 
+| View Questions     | :white_check_mark:| 
+| Upvote or Downvotes questions     | :white_check_mark:| 
+| Answer Questions     | :white_check_mark:| 
+| Upvote or Downvotes answers     | :white_check_mark:| 
+| Subscribe to Questions     | :white_check_mark:| 
+| Test Driven Development     | :white_check_mark:| 
+| Continuous Integration and Continuous Deployment     | :white_check_mark:| 
+| Search (Elastic Search)     | :white_check_mark:| 
+| Micro service Architecture     | :white_check_mark:| 
+| Background Services in RabbitMQ     | :white_check_mark:| 
+| Automated Pull Request Validation based on ESLint     | :white_check_mark:| 
+| Test Coverage Reporting     | :white_check_mark:| 
 
 > API that implements the basic features of stack overflow
 
