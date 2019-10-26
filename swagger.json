@@ -12,20 +12,14 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
-  "tags": [
-    {
-      "name": "User",
-      "description": "Operations carried out on the user resource"
-    }
-  ],
   "paths": {
     "/users": {
       "post": {
         "tags": [
-          "users"
+          "User"
         ],
         "summary": "Create new user account",
-        "operationId": "createUser",
+        "operationId": "create-user",
         "description": "Creates a new user by taking the firstname, lastname, email and password",
         "consumes": [
           "application/json"
@@ -38,6 +32,7 @@
             "in": "body",
             "name": "New User Account",
             "description": "new user account to create",
+            "required": true,
             "schema": {
               "$ref": "#/definitions/User"
             }
@@ -54,14 +49,33 @@
             "description": "Something is wrong on the server, not your fault"
           }
         }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get all users",
+        "operationId": "get-users",
+        "description": "Get all users",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Users fetched successfully"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
       }
     },
-    "/user": {
+    "/users/login": {
       "post": {
         "tags": [
-          "admins"
+          "User"
         ],
-        "summary": "Login an existing user",
+        "summary": "Login a user",
         "operationId": "login",
         "description": "Login to an existing user account",
         "consumes": [
@@ -74,7 +88,8 @@
           {
             "in": "body",
             "name": "Login a user",
-            "description": "User login details",
+            "required": true,
+            "description": "Login using email and password",
             "schema": {
               "$ref": "#/definitions/UserLogin"
             }
@@ -82,28 +97,25 @@
         ],
         "responses": {
           "200": {
-            "description": "user login",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
+            "description": "Login successful"
           },
           "400": {
-            "description": "invalid username or password",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
+            "description": "There is something wrong with the request payload"
+          },
+          "500": {
+            "description": "Something is wrong on the server, not your fault"
           }
         }
       }
     },
-    "/user/update/": {
-      "put": {
+    "/users/forgot-password": {
+      "post": {
         "tags": [
-          "admins"
+          "User"
         ],
-        "summary": "update an existing user",
-        "operationId": "profile update",
-        "description": "Update an existing user account",
+        "summary": "Recover forgotten password",
+        "operationId": "forgot-password",
+        "description": "Send registered email to receive instructions to reset password",
         "consumes": [
           "application/json"
         ],
@@ -113,28 +125,153 @@
         "parameters": [
           {
             "in": "body",
-            "name": "update a user details",
-            "description": "User update details",
+            "name": "email",
+            "required": true,
+            "description": "Account email",
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/UserEmail"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "user profile updated",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
-          },
-          "302": {
-            "description": "User not logged in (Redirect)"
+            "description": "Please check your email for further instructions on resetting your password"
           },
           "400": {
-            "description": "invalid object",
+            "description": "There is something wrong with the request payload"
+          },
+          "500": {
+            "description": "Oops! Something went wrong."
+          }
+        }
+      }
+    },
+    "/users/reset-password": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Reset a user's password",
+        "operationId": "reset-password",
+        "description": "Reset a user's password",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "Password",
+            "required": true,
             "schema": {
-              "$ref": "#/definitions/errors"
+              "$ref": "#/definitions/NewUserpassword"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "password reset email successful"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get one user",
+        "operationId": "get-user",
+        "description": "Get one user",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single user gotten successfully"
+          },
+          "400": {
+            "description": "Something is wrong with the request payload"
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "summary": "update a user's details",
+        "operationId": "update-user",
+        "description": "Update an existing user account",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "update a user details",
+            "description": "User update details",
+            "schema": {
+              "$ref": "#/definitions/UpdateUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user profile updated"
+          },
+          "400": {
+            "description": "invalid object"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Oops! Something went wrong"
           }
         }
       }
@@ -169,93 +306,6 @@
             "schema": {
               "$ref": "#/definitions/UserLoginCookies"
             }
-          }
-        }
-      }
-    },
-    "/user/lost-password/": {
-      "post": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "Request lost an existing user password",
-        "operationId": "password Lost request",
-        "description": "Request lost an existing user account password",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "request lost a user password",
-            "description": "Account email",
-            "schema": {
-              "$ref": "#/definitions/UserEmail"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "password reset email sent"
-          },
-          "400": {
-            "description": "unable to dispatch password reset to email",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
-          },
-          "409": {
-            "description": "invalid email"
-          }
-        }
-      }
-    },
-    "/user/reset-password/:key/": {
-      "post": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "Reset an existing user password",
-        "operationId": "password reset",
-        "description": "Reset an existing user account password",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "key",
-            "description": "password the token send the user email address",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "reset a user password",
-            "description": "Account email",
-            "schema": {
-              "$ref": "#/definitions/NewUserpassword"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "password reset email successful"
-          },
-          "400": {
-            "description": "unable to update password",
-            "schema": {
-              "$ref": "#/definitions/errors"
-            }
-          },
-          "409": {
-            "description": "invalid token"
           }
         }
       }
@@ -369,30 +419,6 @@
           }
         }
       }
-    },
-    "/user/show": {
-      "get": {
-        "tags": [
-          "admins"
-        ],
-        "summary": "Display all users",
-        "operationId": "Get users",
-        "description": "Get all users",
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "Users fetched successfully",
-            "schema": {
-              "$ref": "#/definitions/UserLoginCookies"
-            }
-          },
-          "404": {
-            "description": "Page not found"
-          }
-        }
-      }
     }
   },
   "definitions": {
@@ -424,24 +450,50 @@
         }
       }
     },
+    "UpdateUser": {
+      "type": "object",
+      "required": [
+        "firstname",
+        "lastname",
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true,
+          "format": "email"
+        },
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        },
+        "confirmNewPassword": {
+          "type": "string"
+        }
+      }
+    },
     "UserLogin": {
       "type": "object",
       "required": [
-        "user",
+        "email",
         "password"
       ],
       "properties": {
-        "user": {
+        "email": {
           "type": "string",
           "uniqueItems": true
         },
         "password": {
           "type": "string",
-          "uniqueItems": true,
           "format": "password"
-        },
-        "remember-me": {
-          "type": "boolean"
         }
       }
     },
@@ -472,10 +524,15 @@
     "NewUserpassword": {
       "type": "object",
       "required": [
-        "password"
+        "password",
+        "confirmPassword"
       ],
       "properties": {
-        "password": {
+        "newPassword": {
+          "type": "string",
+          "format": "password"
+        },
+        "confirmNewPassword": {
           "type": "string",
           "format": "password"
         }

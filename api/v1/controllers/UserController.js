@@ -1,5 +1,6 @@
 const status = require("http-status");
 const _ = require("lodash");
+const mongoose = require("mongoose");
 
 const UserRepository = require("../../../repositories/UserRepository");
 
@@ -54,9 +55,8 @@ class UserController {
     async getAll(req, res, next) {
         handleCall((async () => {
             const users = await UserRepository.findAll();
-            return response.sendSuccess({res, body: users});
+            return response.sendSuccess({res, body: users, message: "All users"});
         }));
-
     }
 
     /**
@@ -68,12 +68,14 @@ class UserController {
      */
     async getOne(req, res, next) {
         handleCall((async () => {
-            const {id} = req.params;
-            const user = await UserRepository.findOne(id);
-            if (!user) {
+            let {id} = req.params;
+            id = mongoose.Types.ObjectId(id);
+            const result = await UserRepository.findOne(id);
+            if (!result) {
                 return response.sendError({res, message: "User not found", statusCode: status.NOT_FOUND});
             }
-            return response.sendSuccess({res, body: user});
+            const user = _.pick(result, ["_id", "firstname", "lastname", "email"]);
+            return response.sendSuccess({res, body: user, message: "Single user gotten successfully"});
         }));
     }
 

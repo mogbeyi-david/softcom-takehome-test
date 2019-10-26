@@ -1,18 +1,19 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const UserController = require("../controllers/UserController");
-const AuthController = require("../controllers/AuthController");
+const UserController = require('../controllers/UserController');
+const AuthController = require('../controllers/AuthController');
+const authMiddleware = require('../../../middlewares/auth');
+const validateObjectIdMiddleware = require(
+    '../../../middlewares/validate-objectId');
 
+router.post('/forgot-password', AuthController.sendResetPasswordLink);
+router.post('/reset-password', AuthController.resetPassword);
+router.post('/login', AuthController.login);
+router.post('/', UserController.create);
 
-router.post("/forgot-password", AuthController.sendResetPasswordLink);
-router.post("/reset-password", AuthController.resetPassword);
-router.post("/login", AuthController.login);
-router.post("/", UserController.create);
+router.get('/', UserController.getAll);
+router.get('/:id', [validateObjectIdMiddleware], UserController.getOne);
 
-router.get("/", UserController.getAll);
-router.get("/:id", UserController.getOne);
-
-router.put("/:id", UserController.update);
-
+router.put('/:id', [validateObjectIdMiddleware], UserController.update);
 
 module.exports = router;
