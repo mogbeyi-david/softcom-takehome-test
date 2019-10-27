@@ -844,13 +844,7 @@
         "lastname": {
           "type": "string"
         },
-        "oldPassword": {
-          "type": "string"
-        },
-        "newPassword": {
-          "type": "string"
-        },
-        "confirmNewPassword": {
+        "password": {
           "type": "string"
         }
       }

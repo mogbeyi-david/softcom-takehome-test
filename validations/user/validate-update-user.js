@@ -10,7 +10,7 @@ const validateUpdateUser = (user) => {
         firstname: Joi.string().required(),
         lastname: Joi.string().required(),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-        password: Joi.string().allow('').optional()
+        password: Joi.string().allow('').required("Please enter your password")
     })
     return schema.validate(user)
 }

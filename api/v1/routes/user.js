@@ -13,7 +13,6 @@ router.post('/', UserController.create)
 router.get('/', UserController.getAll)
 router.get('/:id', [validateObjectIdMiddleware], UserController.getOne)
 
-router.put('/:id/change-password', [validateObjectIdMiddleware, authMiddleware], AuthController.changePassword)
 router.put('/:id', [validateObjectIdMiddleware], UserController.update)
 
 module.exports = router

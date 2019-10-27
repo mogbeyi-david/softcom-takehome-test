@@ -3,7 +3,6 @@ const _ = require('lodash')
 const status = require('http-status')
 
 const validateUser = require('../../../validations/login')
-const validateChangeUserPassword = require('../../../validations/user/validate-change-user-password')
 const response = require('../../../utility/response')
 const hasher = require('../../../utility/hasher')
 const mailer = require('../../../utility/mailer')
@@ -86,8 +85,8 @@ class AuthController
             if (!email) return response.sendError({ res, message: 'Email is required' })
 
             let { password, confirmPassword } = req.body
-            if (password !== confirmPassword) return response.sendError(
-              { res, message: 'Passwords do not match' })
+            if (password !== confirmPassword) return response.sendError({ res, message: 'Passwords do not match' })
+
             let user = await UserRepository.findByEmail(email)
             if (!user) return response.sendError({
                 res,
@@ -100,39 +99,6 @@ class AuthController
             user = _.pick(result, ['_id', 'firstname', 'lastname', 'email'])
             return response.sendSuccess(
               { res, message: 'Password reset successfully', body: user })
-        }), next)
-    }
-
-    async changePassword (req, res, next)
-    {
-        const { id } = req.params
-        const { oldPassword, newPassword, confirmNewPassword } = req.body
-        const { userId: user, isAdmin } = req.user
-        if (user.toString() !== id.toString() && !isAdmin) {
-            return response.sendError(
-              { res, message: 'You are not authorized to perform this operation', statusCode: status.UNAUTHORIZED })
-        }
-        const { error } = validateChangeUserPassword(req.body) // Check if the request payload meets specifications
-        if (error) {
-            return response.sendError({ res, message: error.details[0].message })
-        }
-
-        if (newPassword !== confirmNewPassword) {
-            return response.sendError({ res, message: 'Passwords do not match' })
-        }
-
-        return handleCall((async () => {
-            let user = await UserRepository.findOne(id)
-            if (!user) {
-                return response.sendError({ res, statusCode: status.NOT_FOUND, message: 'User not found' })
-            }
-            const isValidPassword = hasher.comparePasswords(oldPassword, user.password)
-            if (!isValidPassword) {
-                return response.sendError({ res, message: 'Old password is not correct' })
-            }
-            const result = await UserRepository.update({ password: newPassword }, id)
-            user = _.pick(result, ['firstname', 'lastname', 'email'])
-            return response.sendSuccess({ res, message: 'User password updated successfully', body: user })
         }), next)
     }
 
