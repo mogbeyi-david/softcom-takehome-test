@@ -89,14 +89,6 @@ class UserController {
             if (error) return response.sendError({ res, message: error.details[0].message });
 
             let { id } = req.params;
-            const { userId, isAdmin } = req.user;
-            if (userId.toString() !== id && !isAdmin) {
-                return response.sendError({
-                    res,
-                    message: "You do not have access to carry out this operation",
-                    statusCode: status.UNAUTHORIZED,
-                });
-            }
             let { firstname, lastname, email, password } = req.body;
 
             const existingUser = await UserRepository.findOne(id);

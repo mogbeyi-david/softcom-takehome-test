@@ -43,8 +43,8 @@ describe("User Resource", () => {
 				password: "Test_Password",
 			};
 			const response = await request(server).
-				post(baseURL).
-				send(badUserPayload);
+			  post(baseURL).
+			  send(badUserPayload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/required/i);
 			expect(response.body.message).toMatch(/lastname/i);
@@ -57,8 +57,8 @@ describe("User Resource", () => {
 				password: "Test_Password",
 			};
 			const response = await request(server).
-				post(baseURL).
-				send(badUserPayload);
+			  post(baseURL).
+			  send(badUserPayload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/required/i);
 			expect(response.body.message).toMatch(/firstname/i);
@@ -72,8 +72,8 @@ describe("User Resource", () => {
 				password: "Test_Password",
 			};
 			const response = await request(server).
-				post(baseURL).
-				send(badUserPayload);
+			  post(baseURL).
+			  send(badUserPayload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/valid/i);
 			expect(response.body.message).toMatch(/email/i);
@@ -97,43 +97,43 @@ describe("User Resource", () => {
 				password: "boozai234",
 			};
 			const response = await request(server).
-				post(baseURL).
-				send(badUserPayload);
+			  post(baseURL).
+			  send(badUserPayload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/exists/);
 		});
 
 		it("should fail if the password does not match the required pattern",
-			async () => {
+		  async () => {
 
-				const properPayload = {
-					firstname: "Test_Firstname",
-					lastname: "Test_Lastname",
-					email: "test@email.com",
-					password: "he",
-				};
-				const response = await request(server).
-					post(baseURL).
-					send(properPayload);
-				expect(response.status).toEqual(400);
-				expect(response.body.message).toMatch(/pattern/);
-			});
+			  const properPayload = {
+				  firstname: "Test_Firstname",
+				  lastname: "Test_Lastname",
+				  email: "test@email.com",
+				  password: "he",
+			  };
+			  const response = await request(server).
+				post(baseURL).
+				send(properPayload);
+			  expect(response.status).toEqual(400);
+			  expect(response.body.message).toMatch(/pattern/);
+		  });
 
 		it("should succeed if all the payload requirements are met",
-			async () => {
+		  async () => {
 
-				const properPayload = {
-					firstname: "Test_Firstname",
-					lastname: "Test_Lastname",
-					email: "test@email.com",
-					password: "boozai233",
-				};
-				const response = await request(server).
-					post(baseURL).
-					send(properPayload);
-				expect(response.status).toEqual(201);
-				expect(response.body.message).toMatch(/success/);
-			});
+			  const properPayload = {
+				  firstname: "Test_Firstname",
+				  lastname: "Test_Lastname",
+				  email: "test@email.com",
+				  password: "boozai233",
+			  };
+			  const response = await request(server).
+				post(baseURL).
+				send(properPayload);
+			  expect(response.status).toEqual(201);
+			  expect(response.body.message).toMatch(/success/);
+		  });
 	});
 
 	describe("Logging in a User", () => {
@@ -143,34 +143,34 @@ describe("User Resource", () => {
 				password: "boozai234",
 			};
 			const response = await request(server).
-				post(`${baseURL}/login`).
-				send(badUserPayload);
+			  post(`${baseURL}/login`).
+			  send(badUserPayload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/required/);
 		});
 
 		it("should fail if the passwords does not match the one in the DB",
-			async () => {
+		  async () => {
 
-				await User.insertMany([
-					{
-						firstname: "Test_Firstname",
-						lastname: "Test_Lastname",
-						email: "test@email.com",
-						password: await hasher.encryptPassword("boozai234"),
-					},
-				]);
+			  await User.insertMany([
+				  {
+					  firstname: "Test_Firstname",
+					  lastname: "Test_Lastname",
+					  email: "test@email.com",
+					  password: await hasher.encryptPassword("boozai234"),
+				  },
+			  ]);
 
-				const badUserPayload = {
-					email: "test@email.com",
-					password: "boozai2345",
-				};
-				const response = await request(server).
-					post(`${baseURL}/login`).
-					send(badUserPayload);
-				expect(response.status).toEqual(400);
-				expect(response.body.message).toMatch(/Incorrect/i);
-			});
+			  const badUserPayload = {
+				  email: "test@email.com",
+				  password: "boozai2345",
+			  };
+			  const response = await request(server).
+				post(`${baseURL}/login`).
+				send(badUserPayload);
+			  expect(response.status).toEqual(400);
+			  expect(response.body.message).toMatch(/Incorrect/i);
+		  });
 
 		it("should fail if the user does not exist", async () => {
 			const badUserPayload = {
@@ -178,8 +178,8 @@ describe("User Resource", () => {
 				password: "boozai234",
 			};
 			const response = await request(server).
-				post(`${baseURL}/login`).
-				send(badUserPayload);
+			  post(`${baseURL}/login`).
+			  send(badUserPayload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/Incorrect/i);
 		});
@@ -199,8 +199,8 @@ describe("User Resource", () => {
 				password: "boozai234",
 			};
 			const response = await request(server).
-				post(`${baseURL}/login`).
-				send(badUserPayload);
+			  post(`${baseURL}/login`).
+			  send(badUserPayload);
 			expect(response.status).toEqual(200);
 			expect(response.body.message).toMatch(/successful/);
 			expect(response.header["x-auth-token"]).toBeDefined();
@@ -244,14 +244,14 @@ describe("User Resource", () => {
 			});
 			const testUserId = testUser._id;
 			const response = await request(server).
-				get(`${baseURL}/${testUserId}`);
+			  get(`${baseURL}/${testUserId}`);
 			expect(response.status).toEqual(200);
 			expect(response.body.message).toMatch(/success/);
 		});
 
 		it("should return 404 if the user does not exists", async () => {
 			const response = await request(server).
-				get(`${baseURL}/222222222222`);
+			  get(`${baseURL}/222222222222`);
 			expect(response.status).toEqual(404);
 			expect(response.body.message).toMatch(/not found/i);
 		});
@@ -260,30 +260,49 @@ describe("User Resource", () => {
 
 	describe("Updating a user's details", () => {
 
-		it("should return 400 if the firstname, lastname or email is missing", async () => {
+		it("should fail if client is not logged in", async () => {
 			const badPayload = {};
 			const response = await request(server).
-				put(`${baseURL}/112112112121`).
-				send(badPayload);
+			  put(`${baseURL}/112112112121`).
+			  send(badPayload);
+			expect(response.status).toEqual(401);
+		});
+
+		it("should return 400 if the firstname, lastname or email is missing", async () => {
+			const token = (new User()).generateJsonWebToken();
+			const badPayload = {};
+			const response = await request(server).
+			  put(`${baseURL}/112112112121`).
+			  set("x-auth-token", token).
+			  send(badPayload);
 			expect(response.status).toEqual(400);
 		});
 
 		it("should return 404 if the user does not exist", async () => {
+			const testUser = new User({
+				firstname: "test_firstname",
+				lastname: "test_lastname",
+				email: "test@email.com",
+				password: "password"
+			});
+			const token = testUser.generateJsonWebToken();
+			await testUser.save();
 			const badPayload = {
 				firstname: "test_firstname",
 				lastname: "test_lastname",
 				email: "test@email.com",
-				password: "some_password",
+				password: "password",
 			};
-			const testId = mongoose.Types.ObjectId();
 			const response = await request(server).
-				put(`${baseURL}/${testId}`).
-				send(badPayload);
+			  put(`${baseURL}/${mongoose.Types.ObjectId()}`)
+			  .set("x-auth-token", token)
+			  .send(badPayload);
 			expect(response.status).toEqual(404);
 			expect(response.body.message).toEqual("User does not exist");
 		});
 
 		it("should return 400 if the password is wrong", async () => {
+			const token = (new User()).generateJsonWebToken();
 			const testUser = await User.create({
 				firstname: "test_first_name",
 				lastname: "test_last_name",
@@ -298,12 +317,14 @@ describe("User Resource", () => {
 			};
 			const id = testUser._id;
 			const response = await request(server).
-				put(`${baseURL}/${id}`).
-				send(newUser);
+			  put(`${baseURL}/${id}`).
+			  set("x-auth-token", token).
+			  send(newUser);
 			expect(response.status).toEqual(400);
 		});
 
 		it("should return 200 with the updated user details", async () => {
+			const token = (new User()).generateJsonWebToken();
 			const testUser = await User.create({
 				firstname: "test_first_name",
 				lastname: "test_last_name",
@@ -318,11 +339,12 @@ describe("User Resource", () => {
 			};
 			const id = testUser._id;
 			const response = await request(server).
-				put(`${baseURL}/${id}`).
-				send(newUser);
+			  put(`${baseURL}/${id}`).
+			  set("x-auth-token", token).
+			  send(newUser);
 			expect(response.status).toEqual(200);
 			expect(response.body.message).
-				toEqual("User details updated successfully");
+			  toEqual("User details updated successfully");
 		});
 
 	});
@@ -334,8 +356,8 @@ describe("User Resource", () => {
 				confirmPassword: "heh",
 			};
 			const response = await request(server).
-			post(`${baseURL}/reset-password?email=mogbeyidavid@gmail.com`).
-			send(payload);
+			  post(`${baseURL}/reset-password?email=mogbeyidavid@gmail.com`).
+			  send(payload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/required/);
 		});
@@ -346,8 +368,8 @@ describe("User Resource", () => {
 				confirmPassword: "heh",
 			};
 			const response = await request(server).
-				post(`${baseURL}/reset-password`).
-				send(payload);
+			  post(`${baseURL}/reset-password`).
+			  send(payload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/required/);
 		});
@@ -367,8 +389,8 @@ describe("User Resource", () => {
 			};
 
 			const response = await request(server).
-				post(`${baseURL}/reset-password?email=mogbeyidavid@gmail.com`).
-				send(payload);
+			  post(`${baseURL}/reset-password?email=mogbeyidavid@gmail.com`).
+			  send(payload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toEqual("Passwords do not match");
 		});
@@ -381,8 +403,8 @@ describe("User Resource", () => {
 			};
 
 			const response = await request(server).
-				post(`${baseURL}/reset-password?email=nonexistent@gmail.com`).
-				send(payload);
+			  post(`${baseURL}/reset-password?email=nonexistent@gmail.com`).
+			  send(payload);
 			expect(response.body.message).toMatch(/exist/i);
 			expect(response.status).toEqual(404);
 		});
@@ -402,8 +424,8 @@ describe("User Resource", () => {
 			};
 
 			const response = await request(server).
-				post(`${baseURL}/reset-password?email=test@email.com`).
-				send(payload);
+			  post(`${baseURL}/reset-password?email=test@email.com`).
+			  send(payload);
 			expect(response.status).toEqual(200);
 			expect(response.body.message).toMatch("success");
 		});
@@ -415,8 +437,8 @@ describe("User Resource", () => {
 
 			const payload = {};
 			const response = await request(server).
-				post(`${baseURL}/forgot-password`).
-				send(payload);
+			  post(`${baseURL}/forgot-password`).
+			  send(payload);
 			expect(response.status).toEqual(400);
 			expect(response.body.message).toMatch(/required/);
 		});
@@ -433,8 +455,8 @@ describe("User Resource", () => {
 				email: "test@email.com",
 			};
 			const response = await request(server).
-				post(`${baseURL}/forgot-password`).
-				send(payload);
+			  post(`${baseURL}/forgot-password`).
+			  send(payload);
 			expect(response.status).toEqual(200);
 			expect(response.body.message).toMatch(/Please check your email/);
 		});
@@ -444,8 +466,8 @@ describe("User Resource", () => {
 				email: "test@email.com",
 			};
 			const response = await request(server).
-				post(`${baseURL}/forgot-password`).
-				send(payload);
+			  post(`${baseURL}/forgot-password`).
+			  send(payload);
 			expect(response.status).toEqual(200);
 			expect(response.body.message).toMatch(/Please check your email/);
 		});

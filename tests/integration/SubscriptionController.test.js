@@ -67,7 +67,6 @@ describe("Question Resource", () => {
 				email: "test@email.com",
 				password: await hasher.encryptPassword("boozai123")
 			});
-
 			const testQuestion = await Question.create({
 				question: "test question",
 				user: testUser._id
@@ -75,7 +74,6 @@ describe("Question Resource", () => {
 			const token = testUser.generateJsonWebToken();
 			const payload = {
 				question: testQuestion._id,
-				user: testUser._id
 			};
 			const response = await request(server)
 				.post(`${baseURL}/question`)
