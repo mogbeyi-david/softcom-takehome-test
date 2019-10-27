@@ -24,7 +24,7 @@ class QuestionRepository {
      * @returns {Promise<*>}
      */
 	async findAll() {
-		return await this.question.find({}).lean();
+		return await this.question.find({}).populate("answer").lean();
 	}
 
 	/**
@@ -33,7 +33,7 @@ class QuestionRepository {
      * @returns {Promise<*>}
      */
 	async findOne(id) {
-		return await this.question.findOne({_id: id});
+		return await this.question.findOne({_id: id}).populate("answer");
 	}
 
 	async update(id, data) {

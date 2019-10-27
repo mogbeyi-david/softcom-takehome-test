@@ -47,7 +47,7 @@ class AnswerRepository {
 	}
 
 	async findAllForQuestion(question) {
-		return await this.answer.find({question}).lean();
+		return await this.answer.find({question}).populate("question").lean();
 	}
 
 	async search(query) {
