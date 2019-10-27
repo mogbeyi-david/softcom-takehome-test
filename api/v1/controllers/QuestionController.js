@@ -66,7 +66,7 @@ class QuestionController {
 			if (!question) {
 				return response.sendError({res, statusCode: status.NOT_FOUND, message: "Question not found"});
 			}
-			return response.sendSuccess({res, body: question, message: question.question});
+			return response.sendSuccess({res, body: question, message: "Single question gotten successfully"});
 		}), next);
 	}
 
