@@ -22,7 +22,7 @@
 
 - :cop: Authentication via [JWT](https://jwt.io/)
 - Routes mapping via [express-router](https://expressjs.com/en/guide/routing.html)
-- Documented using [Swagger](https://swagger.io). Find link to docs [here](http://206.189.227.235:3000/api-docs)
+- Documented using [Swagger](https://swagger.io). Find link to docs [here](http://206.189.227.235/api-docs)
 - Background operations are run on [stack-overflow-lite-background-service](https://github.com/mogbeyi-david/softcom-interview-background-service.git). This is private repo and will return 404 if you do not have access
 - Uses [MongoDB](https://www.mongodb.com) as database.
 - [Mongoose](https://mongoosejs.com) as object document model
@@ -33,7 +33,7 @@
 - Asynchronous and background operations via [RabbitMQ](https://www.rabbitmq.com/uri-spec.html). You can find the RabbitMQ Management [Here](http://178.128.153.181:15672/#/). Please contact the Developer for login credentials
 - Uses [Elastic Search](https://www.elastic.co/products/elasticsearch) for search operations
 - [Jenkins](https://jenkins.io) for continuous integration and continuous deployment. Find the CI-Server [Here](http://204.48.19.194:8080). Please contact the Developer for login credentials
-- [Digital Ocean](https://digitalocean.com) for deployment. Please find the link to the health check [Here](http://206.189.227.235:3000/health-check) and API documentation [here](http://206.189.227.235:3000/api-docs)
+- [Digital Ocean](https://digitalocean.com) for deployment. Please find the link to the health check [Here](http://206.189.227.235/health-check) and API documentation [here](http://206.189.227.235/api-docs)
 - Containerization with [Docker](https://www.docker.com)
 - Pull request style enforcement using [HoundCI](https://houndci.com)
 - example for User model and User controller, with jwt authentication, simply type `npm i` and `npm start`
@@ -95,6 +95,7 @@ This codebase has the following directories:
 - validations Request payload validation at API level
 
 
+## Repositories
 ## Repositories
 
 ### Create a repository
