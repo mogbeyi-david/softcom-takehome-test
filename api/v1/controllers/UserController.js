@@ -6,8 +6,7 @@ const UserRepository = require('../../../repositories/UserRepository')
 
 const validateCreateUser = require(
   '../../../validations/user/validate-create-user')
-const validateUpdateUser = require(
-  '../../../validations/user/validate-update-user')
+const validateUpdateUser = require('../../../validations/user/validate-update-user')
 const response = require('../../../utility/response')
 const hasher = require('../../../utility/hasher')
 const handleCall = require('../../../helper/handleCall')
@@ -108,10 +107,11 @@ class UserController
     {
         return handleCall((async () => {
             const { error } = validateUpdateUser(req.body)
-            if (error) return response.sendError(
-              { res, message: error.details[0].message })
+            if (error) return response.sendError({ res, message: error.details[0].message })
+
             let { id } = req.params
             let { firstname, lastname, email, password } = req.body
+
             const existingUser = await UserRepository.findOne(id)
             if (!existingUser) {
                 return response.sendError({
@@ -120,30 +120,11 @@ class UserController
                     statusCode: status.NOT_FOUND,
                 })
             }
-
             const isValidPassword = await hasher.comparePasswords(password, existingUser.password)
             if (!isValidPassword) {
                 return response.sendError({ res, message: 'Wrong Password' })
             }
-
-            // if (newPassword !== confirmNewPassword) return response.sendError(
-            //   { res, message: 'Passwords do not match' })
-
-            // if (newPassword !== '') {
-            //     if (!await hasher.comparePasswords(oldPassword,
-            //       existingUser.password)) {
-            //         return response.sendError(
-            //           { res, message: 'Old password is not correct' })
-            //     }
-            //     if (!/^[a-zA-Z0-9]{3,30}$/.test(newPassword)) {
-            //         return response.sendError(
-            //           { res, message: 'Password is not secure enough' })
-            //     }
-            // }
             let user = { firstname, lastname, email }
-            // if (newPassword) {
-            //     user.password = newPassword
-            // }
             const result = await UserRepository.update(user, id)
             user = _.pick(result, ['firstname', 'lastname', 'email'])
             return response.sendSuccess({ res, message: 'User details updated successfully', body: user })
