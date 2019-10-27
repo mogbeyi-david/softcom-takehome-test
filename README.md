@@ -700,6 +700,7 @@ This command:
 - drops the `test database` after the test
 
 ![Image showing test coverage](https://i.ibb.co/YQJHjW7/Screenshot-2019-10-26-at-7-38-20-PM.png)
+![Image showing CI/CD Dashboard](https://i.ibb.co/s551pq4/Screenshot-2019-10-28-at-12-06-21-AM.png)
 
 ## npm run production
 
