@@ -60,50 +60,6 @@ describe("Question Resource", () => {
 			expect(response.status).toEqual(400);
 		});
 
-		it("should return a 400 if the payload does not have a user", async () => {
-			const token = (new User()).generateJsonWebToken();
-			const payload = {
-				question: mongoose.Types.ObjectId()
-			};
-			const response = await request(server)
-				.post(`${baseURL}/question`)
-				.set("x-auth-token", token)
-				.send(payload);
-			expect(response.status).toEqual(400);
-		});
-		it("should return a 404 if the user does not exist", async () => {
-			const token = (new User()).generateJsonWebToken();
-			const payload = {
-				question: mongoose.Types.ObjectId(),
-				user: mongoose.Types.ObjectId()
-			};
-			const response = await request(server)
-				.post(`${baseURL}/question`)
-				.set("x-auth-token", token)
-				.send(payload);
-			expect(response.status).toEqual(404);
-		});
-
-		it("should return a 404 if the question does not exist", async () => {
-			const testUser = await User.create({
-				firstname: "test_firstname",
-				lastname: "test_lastname",
-				email: "test@email.com",
-				password: await hasher.encryptPassword("boozai123")
-			});
-			const token = testUser.generateJsonWebToken();
-			const payload = {
-				question: mongoose.Types.ObjectId(),
-				user: testUser._id
-			};
-			const response = await request(server)
-				.post(`${baseURL}/question`)
-				.set("x-auth-token", token)
-				.send(payload);
-			expect(response.status).toEqual(404);
-			expect(response.body.message).toEqual("Question does not exist");
-		});
-
 		it("should return a 200 for a valid payload", async () => {
 			const testUser = await User.create({
 				firstname: "test_firstname",

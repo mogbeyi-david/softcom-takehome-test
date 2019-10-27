@@ -854,6 +854,19 @@
         }
       }
     },
+    "UserEmail": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "uniqueItems": true,
+          "format": "email"
+        }
+      }
+    },
     "UpdateUser": {
       "type": "object",
       "required": [
@@ -902,11 +915,11 @@
         "confirmPassword"
       ],
       "properties": {
-        "newPassword": {
+        "password": {
           "type": "string",
           "format": "password"
         },
-        "confirmNewPassword": {
+        "confirmPassword": {
           "type": "string",
           "format": "password"
         }

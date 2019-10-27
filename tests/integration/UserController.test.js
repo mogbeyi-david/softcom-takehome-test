@@ -329,6 +329,17 @@ describe("User Resource", () => {
 
 	describe("Resetting a password", () => {
 
+		it("should fail password is not passed", async () => {
+			const payload = {
+				confirmPassword: "heh",
+			};
+			const response = await request(server).
+			post(`${baseURL}/reset-password?email=mogbeyidavid@gmail.com`).
+			send(payload);
+			expect(response.status).toEqual(400);
+			expect(response.body.message).toMatch(/required/);
+		});
+
 		it("should fail if email is not passed in the query string", async () => {
 			const payload = {
 				password: "hello",
