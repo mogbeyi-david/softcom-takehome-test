@@ -24,7 +24,7 @@ class SearchController {
             hits = result.hits.hits.map((hit) => {
                 return hit._source;
             });
-            return response.sendSuccess({ res, message: `Search for ${query}`, body: hits });
+            return response.sendSuccess({ res, message: `Search for User: ${query}`, body: hits });
         }), next);
     }
 
@@ -46,7 +46,7 @@ class SearchController {
             hits = result.hits.hits.map((hit) => {
                 return hit._source;
             });
-            return response.sendSuccess({ res, message: `Search for ${query}`, body: hits });
+            return response.sendSuccess({ res, message: `Search for Answer: ${query}`, body: hits });
         }), next);
     }
 
@@ -68,7 +68,7 @@ class SearchController {
             hits = result.hits.hits.map((hit) => {
                 return hit._source;
             });
-            return response.sendSuccess({ res, message: `Search for ${query}`, body: hits });
+            return response.sendSuccess({ res, message: `Search for Question: ${query}`, body: hits });
         }), next);
     }
 }
