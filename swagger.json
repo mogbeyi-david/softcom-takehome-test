@@ -246,6 +246,13 @@
         "produces": [
           "application/json"
         ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -392,6 +399,13 @@
         "consumes": [
           "application/json"
         ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -404,7 +418,7 @@
           },
           {
             "in": "body",
-            "name": "update a user details",
+            "name": "update a question",
             "description": "User update details",
             "schema": {
               "$ref": "#/definitions/UpdateQuestion"
@@ -556,6 +570,14 @@
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -594,7 +616,7 @@
             "in": "query",
             "name": "up",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "security": [
@@ -670,6 +692,13 @@
         "produces": [
           "application/json"
         ],
+        "security": [
+          {
+            "api_key": [
+              "x-auth-token"
+            ]
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -679,10 +708,10 @@
           },
           {
             "in": "body",
-            "name": "update a user details",
-            "description": "User update details",
+            "name": "update an answer",
+            "description": "Update an answer",
             "schema": {
-              "$ref": "#/definitions/UpdateQuestion"
+              "$ref": "#/definitions/UpdateAnswer"
             }
           }
         ],
@@ -935,5 +964,5 @@
     "http"
   ],
   "basePath": "/api/v1",
-  "host": "206.189.227.235:3000"
+  "host": "127.0.0.1"
 }

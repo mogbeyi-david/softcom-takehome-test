@@ -40,7 +40,7 @@ class AuthController
 					{ res, message: "Email or Password is Incorrect" });
 			}
 			const token = user.generateJsonWebToken();
-			let result = _.pick(user, ["firstname", "lastname", "email"]);
+			let result = _.pick(user, ["_id", "firstname", "lastname", "email"]);
 			result.token = token;
 			res.header("x-auth-token", token);
 			return response.sendSuccess(

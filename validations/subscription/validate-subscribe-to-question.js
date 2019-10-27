@@ -8,8 +8,6 @@ const Joi = require("@hapi/joi");
 const validateSubscribeToQuestion = (subscription) => {
 	const schema = Joi.object({
 		question: Joi.string()
-			.required(),
-		user: Joi.string()
 			.required()
 	});
 	return schema.validate(subscription);

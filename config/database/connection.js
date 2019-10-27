@@ -4,7 +4,8 @@ let connectionString;
 
 switch (environment) {
 case "production":
-	connectionString = "";
+	// Point the database credentials to the production DB here
+	connectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 	break;
 case "testing":
 	connectionString = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.TEST_DB_NAME}`;
