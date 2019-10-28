@@ -1047,7 +1047,7 @@
     "Answer": {
       "type": "object",
       "required": [
-        "question"
+        "answer"
       ],
       "properties": {
         "question": {
@@ -1064,7 +1064,7 @@
         "answer"
       ],
       "properties": {
-        "question": {
+        "answer": {
           "type": "string"
         }
       }
